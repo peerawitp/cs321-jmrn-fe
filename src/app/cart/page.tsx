@@ -1,30 +1,7 @@
 "use client";
 import React, { useState } from 'react';
+import { initialCart, CartItem } from '@/data/cartItem';
 
-interface CartItem {
-  productId: number;
-  productName: string;
-  price: number;
-  quantity: number;
-  imageUrl: string;
-}
-
-const initialCart: CartItem[] = [
-  {
-    productId: 1,
-    productName: 'Motorcycle Tire - 120/70-17',
-    price: 600.25,
-    quantity: 2,
-    imageUrl: '/images/tire-120-70-17.jpg',
-  },
-  {
-    productId: 2,
-    productName: 'Motorcycle Tire - 180/55-17',
-    price: 900.37,
-    quantity: 1,
-    imageUrl: '/images/tire-180-55-17.jpg',
-  },
-];
 
 const Cart: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCart);
@@ -56,7 +33,8 @@ const Cart: React.FC = () => {
 
   // ฟังก์ชันสำหรับลบสินค้าออกจากตะกร้า
   const removeItem = (productId: number) => {
-    setCartItems((prevCart) => prevCart.filter((item) => item.productId !== productId));
+    setCartItems((prevCart) =>
+       prevCart.filter((item) => item.productId !== productId));
   };
 
   return (

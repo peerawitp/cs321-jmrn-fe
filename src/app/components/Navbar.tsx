@@ -1,20 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { products, Product } from "@/data/products"; // adjust the path as necessary
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+    const dropdownRef = useRef(null); // Reference to the dropdown
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
 
-    const handleSearch = (event: React.FormEvent) => {
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+        
+        // Filter products based on the search query
+        const filtered = products.filter(product =>
+            product.name.toLowerCase().includes(query.toLowerCase())
+        );
+        setFilteredProducts(filtered);
+    };
+
+    const handleSearchSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         console.log("Search for:", searchQuery);
     };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setFilteredProducts([]); // Hide the dropdown when clicking outside
+        }
+    };
+
+    useEffect(() => {
+        // Listen for clicks outside of the dropdown
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            // Clean up event listener
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <nav className="bg-white shadow-md">
@@ -27,11 +57,11 @@ const Navbar = () => {
                     </div>
 
                     {/* Search bar */}
-                    <form onSubmit={handleSearch} className="hidden md:flex ml-auto w-full md:w-auto md:ml-auto">
+                    <form onSubmit={handleSearchSubmit} className="relative hidden md:flex ml-auto w-full md:w-auto md:ml-auto">
                         <input
                             type="text"
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={handleSearchChange}
                             placeholder="Search products..."
                             className="w-full md:w-96 text-gray-500 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -41,6 +71,24 @@ const Navbar = () => {
                         >
                             Search
                         </button>
+
+                        {/* Dropdown for search results */}
+                        {searchQuery && filteredProducts.length > 0 && (
+                            <div
+                                ref={dropdownRef} // Attach ref to the dropdown
+                                className="absolute top-full left-0 mt-2 w-full md:w-96 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+                            >
+                                {filteredProducts.map((product) => (
+                                    <Link
+                                        key={product.id}
+                                        href={`/products/${product.id}`}
+                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    >
+                                        {product.name}
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
                     </form>
 
                     {/* Desktop Links */}
