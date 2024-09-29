@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
+ /* :root {
+  --background: #fffdfd;
   --foreground: #171717;
 }
 
@@ -12,13 +12,13 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: #e4e4e4e4;
   font-family: Arial, Helvetica, sans-serif;
-}
+} 
 
 @layer utilities {
   .text-balance {
