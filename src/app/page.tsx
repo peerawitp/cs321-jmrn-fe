@@ -21,7 +21,7 @@ export default function Home() {
 
   const handleUpdateOpenPopUp = () => {
     if (id === null) {
-      alert("No id yet");
+      alert("Select product first");
     }
     else {
       setShowPopUp(true); // Show pop-up
