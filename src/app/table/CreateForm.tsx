@@ -8,31 +8,6 @@ interface CreateFormProps {
   closePopUp: () => void; // Function with no arguments, returning nothing
 }
 
-
-const createObjHandler = () => {
-
-  // const product: Product = {
-  //   id: "9",
-  //   name: "Wichai",
-  //   description: "All-season tire for SUVs",
-  //   imageURL: "https://example.com/image9.jpg",
-  //   TireSize: "235/65R17",
-  //   PatternAndType: "All-Season",
-  //   OverAllDiameter: 737,
-  //   OverAllWidth: 235,
-  //   MeasurementRim: "17x7.5",
-  //   StandardRim: "17x7",
-  //   Wheel: "Alloy",
-  //   Type: "SUV",
-  //   Quantity: 13,
-  //   Price: 3800,
-  //   createdAt: "2024-09-01T03:00:00",
-  //   updatedAt: "2024-09-26T20:00:00",
-
-  // }
-
-}
-
 const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
 
   const { register, handleSubmit } = useForm();
@@ -47,7 +22,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             ID
           </label>
           <input
-            {...register("id")}
+            {...register("id", {required:true, minLength:1})}
             id="id"
             type="text"
             placeholder="Type here"
@@ -62,7 +37,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Name
           </label>
           <input
-            {...register("name")}
+            {...register("name", {required:true, minLength:1})}
             id="name"
             type="text"
             placeholder="Type here"
@@ -77,13 +52,11 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Description
           </label>
           <input
-            {...register("description")}
+            {...register("description", {required:true, minLength:1})}
             id="description"
             type="text"
             placeholder="Type here"
             className="input input-bordered w-full mt-1"
-            // onChange={makeProductObj}
-            // value={formData.description}
           />
         </div>
 
@@ -104,7 +77,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Tire Size
           </label>
           <input
-            {...register("TireSize")}
+            {...register("TireSize", {required:true, minLength:1})}
             id="TireSize"
             type="text"
             placeholder="Type here"
@@ -119,7 +92,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Pattern and Type
           </label>
           <input
-            {...register("PatternAndType")}
+            {...register("PatternAndType", {required:true, minLength:1})}
             id="PatternAndType"
             type="text"
             placeholder="Type here"
@@ -134,7 +107,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             OverAll Diameter
           </label>
           <input
-            {...register("OverAllDiameter")}
+            {...register("OverAllDiameter", {required:true, minLength:1})}
             id="OverAllDiameter"
             type="number"
             placeholder="Type here"
@@ -149,7 +122,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             OverAll Width
           </label>
           <input
-            {...register("OverAllWidth")}
+            {...register("OverAllWidth", {required:true, minLength:1})}
             id="OverAllWidth"
             type="number"
             placeholder="Type here"
@@ -164,7 +137,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Measurement Rim
           </label>
           <input
-            {...register("MeasurementRim")}
+            {...register("MeasurementRim", {required:true, minLength:1})}
             id="MeasurementRim"
             type="text"
             placeholder="Type here"
@@ -194,7 +167,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Wheel
           </label>
           <input
-            {...register("Wheel")}
+            {...register("Wheel", {required:true, minLength:1})}
             id="Wheel"
             type="text"
             placeholder="Type here"
@@ -209,7 +182,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Type
           </label>
           <input
-            {...register("Type")}
+            {...register("Type", {required:true})}
             id="Type"
             type="text"
             placeholder="Type here"
@@ -224,7 +197,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Quantity
           </label>
           <input
-            {...register("Quantity")}
+            {...register("Quantity", {required:true, min:1})}
             id="Quantity"
             type="number"
             placeholder="Type here"
@@ -239,7 +212,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Price
           </label>
           <input
-            {...register("Price")}
+            {...register("Price", {required:true, min:1})}
             id="Price"
             type="number"
             placeholder="Type here"
@@ -254,7 +227,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Created At
           </label>
           <input
-            {...register("createdAt")}
+            {...register("createdAt", {required:true})}
             id="createdAt"
             type="datetime-local"
             placeholder="Type here"
@@ -269,7 +242,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             Updated At
           </label>
           <input
-            {...register("updatedAt")}
+            {...register("updatedAt", {required:true})}
             id="updatedAt"
             type="datetime-local"
             placeholder="Type here"
