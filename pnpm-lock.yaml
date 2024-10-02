@@ -51,6 +51,9 @@ importers:
       daisyui:
         specifier: ^4.12.10
         version: 4.12.10(postcss@8.4.45)
+      daisyui:
+        specifier: ^4.12.10
+        version: 4.12.10(postcss@8.4.45)
       eslint:
         specifier: ^8
         version: 8.57.0
@@ -514,6 +517,14 @@ packages:
     resolution: {integrity: sha512-jp1RAuzbHhGdXmn957Z2XsTZStXGHzFfF0FgIOZj3Wv9sH7OZgLfXTRZNfKVYxltGUOBsG1kbWAdF5SrqjebvA==}
     engines: {node: '>=16.9.0'}
 
+  culori@3.3.0:
+    resolution: {integrity: sha512-pHJg+jbuFsCjz9iclQBqyL3B2HLCBF71BwVNujUYEvCeQMvV97R59MNK3R2+jgJ3a1fcZgI9B3vYgz8lzr/BFQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
+  daisyui@4.12.10:
+    resolution: {integrity: sha512-jp1RAuzbHhGdXmn957Z2XsTZStXGHzFfF0FgIOZj3Wv9sH7OZgLfXTRZNfKVYxltGUOBsG1kbWAdF5SrqjebvA==}
+    engines: {node: '>=16.9.0'}
+
   damerau-levenshtein@1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
 
@@ -753,6 +764,9 @@ packages:
 
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
+
+  fastparse@1.1.2:
+    resolution: {integrity: sha512-483XLLxTVIwWK3QTrMGRqUfUpoOs/0hbQrl2oz4J0pAcm3A3bu84wxTFqGqkJzewCLdME38xJLJAxBABfQT8sQ==}
 
   fastparse@1.1.2:
     resolution: {integrity: sha512-483XLLxTVIwWK3QTrMGRqUfUpoOs/0hbQrl2oz4J0pAcm3A3bu84wxTFqGqkJzewCLdME38xJLJAxBABfQT8sQ==}
@@ -1404,6 +1418,12 @@ packages:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
       react: ^18.3.1
+
+  react-hook-form@7.53.0:
+    resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
 
   react-hook-form@7.53.0:
     resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
@@ -2218,6 +2238,17 @@ snapshots:
     transitivePeerDependencies:
       - postcss
 
+  culori@3.3.0: {}
+
+  daisyui@4.12.10(postcss@8.4.45):
+    dependencies:
+      css-selector-tokenizer: 0.8.0
+      culori: 3.3.0
+      picocolors: 1.1.0
+      postcss-js: 4.0.1(postcss@8.4.45)
+    transitivePeerDependencies:
+      - postcss
+
   damerau-levenshtein@1.0.8: {}
 
   data-view-buffer@1.0.1:
@@ -2629,6 +2660,8 @@ snapshots:
   fast-json-stable-stringify@2.1.0: {}
 
   fast-levenshtein@2.0.6: {}
+
+  fastparse@1.1.2: {}
 
   fastparse@1.1.2: {}
 
@@ -3269,6 +3302,10 @@ snapshots:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
+
+  react-hook-form@7.53.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-hook-form@7.53.0(react@18.3.1):
     dependencies:
