@@ -1,24 +1,20 @@
+// cartItem.ts
 export interface CartItem {
-    productId: number;
-    productName: string;
-    price: number;
-    quantity: number;
-    imageUrl: string;
-  }
-  
+  productId: number;
+  size: string;  // ขนาดของสินค้า
+  quantity: number;  // จำนวนสินค้าในตะกร้า
+}
+
+// ตัวอย่างข้อมูลสินค้าในตะกร้า
 export const initialCart: CartItem[] = [
-    {
-      productId: 1,
-      productName: 'Motorcycle Tire - 120/70-17',
-      price: 600.25,
-      quantity: 2,
-      imageUrl: '/images/product2.jpg',
-    },
-    {
-      productId: 2,
-      productName: 'Motorcycle Tire - 180/55-17',
-      price: 900.37,
-      quantity: 1,
-      imageUrl: '/images/product2.jpg',
-    },
-  ];
+  {
+    productId: 1,
+    size: "120/70 ZR17",
+    quantity: 2,
+  },
+  {
+    productId: 2,
+    size: "180/55 ZR17",
+    quantity: 1,
+  }
+];

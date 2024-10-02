@@ -1,5 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { products, Product } from "@/data/products"; // นำเข้าข้อมูลจากไฟล์ products.ts
 import CategorySelection from "../components/CategorySelection"; // นำเข้า CategorySelection
@@ -34,7 +35,12 @@ const ProductsPage = () => {
       {filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product: Product) => (
-            <ProductCard key={product.id} product={product} />
+            <Link key={product.id} href={`/products/${product.id}`}>
+              {/* ใช้ ProductCard แสดงผลสินค้า */}
+              
+                <ProductCard product={product} />
+      
+            </Link>
           ))}
         </div>
       ) : (
