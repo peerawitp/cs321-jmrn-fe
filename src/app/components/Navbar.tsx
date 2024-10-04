@@ -55,7 +55,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
           <div className="flex-shrink mr-10">
             <Link href="/" className="text-xl font-bold text-blue-500">
-              MyShop
+              Tire Shop
             </Link>
           </div>
 

@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 import { initialCart, CartItem } from "@/data/cartItem"; // ดึงข้อมูล CartItem
-import { products, findProductById } from "@/data/products"; // ดึงข้อมูล products
-import { addresses, Address } from "@/data/addressData"; // ดึงข้อมูลที่อยู่
+import { findProductById } from "@/data/products"; // ดึงข้อมูล products
+import { addresses } from "@/data/addressData"; // ดึงข้อมูลที่อยู่
 
 const CheckoutPage: React.FC = () => {
   const [cartItems] = useState<CartItem[]>(initialCart); // ใช้ initialCart สำหรับรายการสินค้าในตะกร้า
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null); // เก็บข้อมูลที่อยู่ที่เลือก
-
+  const router = useRouter();
   // ฟังก์ชันคำนวณราคารวม
   const calculateTotalPrice = () => {
     return cartItems.reduce((total, item) => {
@@ -104,7 +105,8 @@ const CheckoutPage: React.FC = () => {
             {/* ราคารวมทั้งหมด */}
             <div className="mt-6 text-right">
               <p className="text-xl font-semibold">Total: ${calculateTotalPrice().toFixed(2)}</p>
-              <button className="mt-4 px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
+              <button className="mt-4 px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+              onClick={() => router.push('/order-confirmation')}>
                 Confirm Purchase
               </button>
             </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { initialCart, CartItem } from "@/data/cartItem";
 import { findProductById } from "@/data/products";
 import CartItemUpdater from '../components/CartItemUpdater';  // นำเข้าคอมโพเนนต์ที่สร้างใหม่
+import Image from "next/image";  // นำเข้า Image component
 
 const Cart: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCart); // ใช้ข้อมูลตะกร้าเริ่มต้นจาก cartItem.ts
@@ -59,9 +60,17 @@ const Cart: React.FC = () => {
 
                 return (
                   <div key={`${item.productId}-${item.size}`} className="flex items-center justify-between p-4 bg-gray-50 rounded shadow">
+                    {/* แสดงรูปภาพสินค้า */}
                     <div className="flex items-center space-x-4">
-                      {/* แสดงชื่อสินค้าและขนาด */}
+                      <Image
+                        src={product.imageUrl}  // ใช้รูปภาพของสินค้าจากข้อมูลสินค้า
+                        alt={product.name}
+                        width={100}  // กำหนดขนาดความกว้างของรูปภาพ
+                        height={100} // กำหนดขนาดความสูงของรูปภาพ
+                        className="rounded"
+                      />
                       <div>
+                        {/* แสดงชื่อสินค้าและขนาด */}
                         <h3 className="text-lg font-bold">{product.name}</h3>
                         <p className="text-gray-600">Size: {item.size}</p>
                       </div>
