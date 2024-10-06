@@ -105,36 +105,39 @@ const Navbar = () => {
           <div className="items-center hidden md:flex md:space-x-8 md:ml-10">
             <Link
               href="/"
-              className="text-gray-700 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+              className="text-gray-700 hover:bg-gray-100  px-3 py-2 rounded-md text-sm font-medium"
             >
               Home
             </Link>
             <Link
               href="/products"
-              className="text-gray-700 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+              className="text-gray-700 hover:bg-gray-100  px-3 py-2 rounded-md text-sm font-medium"
             >
               Products
             </Link>
             <Link
               href="/cart"
-              className="text-gray-700 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+              className="text-gray-700 hover:bg-gray-100  px-3 py-2 rounded-md text-sm font-medium"
             >
               Cart
             </Link>
-           
+
             {session?.user?.email ? (
               <>
                 <Link
-                  href="/profile"
-                  className="text-gray-700 hover:text-blue-400 text-sm font-bold"
-                >
-                  Hi, {session?.user?.firstName} {session?.user?.lastName}
-                </Link>
-                
+                    href="/profile"
+                    className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Profile
+                  </Link>
+                  <p className="text-blue-500 block  rounded-md text-base font-bold">
+                    Hi, {session?.user?.firstName} {session?.user?.lastName}
+                  </p>
+
                 <Link
                   onClick={handleLogout}
                   href=""
-                  className="text-gray-700 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-bold"
+                  className="text-red-700  hover:bg-gray-100  px-3 py-2 rounded-md text-sm font-bold"
                 >
                   Logout
                 </Link>
@@ -142,7 +145,7 @@ const Navbar = () => {
             ) : (
               <Link
                 href="/auth"
-                className="text-gray-700 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-bold"
+                className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-bold"
               >
                 Login | Register
               </Link>
@@ -153,7 +156,7 @@ const Navbar = () => {
           <div className="flex md:hidden">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-400 focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700  focus:outline-none"
             >
               <svg
                 className="h-6 w-6"
@@ -205,22 +208,25 @@ const Navbar = () => {
               >
                 Cart
               </Link>
-              
+
 
               <hr className="border-gray-200 my-2" />
 
               {session?.user?.email ? (
                 <>
                   <Link
-                  href="/profile"
-                  className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Hi, {session?.user?.firstName} {session?.user?.lastName}
-                </Link>
+                    href="/profile"
+                    className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Profile
+                  </Link>
+                  <p className="text-blue-500 block px-3 py-2 rounded-md text-base font-medium">
+                    Hi, {session?.user?.firstName} {session?.user?.lastName}
+                  </p>
                   <Link
                     onClick={handleLogout}
                     href=""
-                    className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
+                    className="text-red-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
                   >
                     Logout
                   </Link>
