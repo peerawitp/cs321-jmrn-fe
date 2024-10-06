@@ -39,6 +39,10 @@ const Navbar = () => {
     }
   };
 
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/" }); // Redirect to homepage after logout
+  };
+
   useEffect(() => {
     // Listen for clicks outside of the dropdown
     document.addEventListener("mousedown", handleClickOutside);
@@ -117,19 +121,18 @@ const Navbar = () => {
             >
               Cart
             </Link>
-            <Link
-              href="/profile"
-              className="text-gray-700 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Profile
-            </Link>
+           
             {session?.user?.email ? (
               <>
-                <p className="text-gray-700 hover:text-blue-400 text-sm font-bold">
-                  Hi, {session?.user?.firstName} {session?.user?.lastName}
-                </p>
                 <Link
-                  onClick={() => signOut()}
+                  href="/profile"
+                  className="text-gray-700 hover:text-blue-400 text-sm font-bold"
+                >
+                  Hi, {session?.user?.firstName} {session?.user?.lastName}
+                </Link>
+                
+                <Link
+                  onClick={handleLogout}
                   href=""
                   className="text-gray-700 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-bold"
                 >
@@ -202,22 +205,20 @@ const Navbar = () => {
               >
                 Cart
               </Link>
-              <Link
-                href="/profile"
-                className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Profile
-              </Link>
+              
 
               <hr className="border-gray-200 my-2" />
 
               {session?.user?.email ? (
                 <>
-                  <p className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">
-                    Hi, {session?.user?.firstName} {session?.user?.lastName}
-                  </p>
                   <Link
-                    onClick={() => signOut()}
+                  href="/profile"
+                  className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Hi, {session?.user?.firstName} {session?.user?.lastName}
+                </Link>
+                  <Link
+                    onClick={handleLogout}
                     href=""
                     className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
                   >
