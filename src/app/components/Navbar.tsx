@@ -23,15 +23,24 @@ const Navbar = () => {
 
     // Filter products based on the search query
     const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(query.toLowerCase()),
+      product.name.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredProducts(filtered);
   };
 
+
   const handleSearchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log("Search for:", searchQuery);
+    if (filteredProducts.length > 0) {
+      // Find the first product's link and trigger a click
+      const firstLink = document.querySelector<HTMLAnchorElement>('.first-product-link');
+      if (firstLink) {
+        firstLink.click();
+      }
+    }
   };
+
 
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -57,42 +66,35 @@ const Navbar = () => {
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
         <div className="flex justify-between items-center">
-          <div className="flex-shrink mr-10">
+          {/* Left Section with Logo */}
+          <div className="flex-shrink-0">
             <Link href="/" className="text-xl font-bold text-blue-500">
               Tire Shop
             </Link>
           </div>
 
-          {/* Search bar */}
+          {/* Center Section with Search Bar */}
           <form
             onSubmit={handleSearchSubmit}
-            className="relative hidden md:flex ml-auto w-full md:w-auto md:ml-auto"
+            className="flex-1 mx-4 relative hidden md:flex w-full max-w-xl"
           >
             <input
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder="Search products..."
-              className="w-full md:w-96 text-gray-500 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Search
-            </button>
-
-            {/* Dropdown for search results */}
             {searchQuery && filteredProducts.length > 0 && (
               <div
-                ref={dropdownRef} // Attach ref to the dropdown
-                className="absolute top-full left-0 mt-2 w-full md:w-96 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+                ref={dropdownRef}
+                className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10"
               >
-                {filteredProducts.map((product) => (
+                {filteredProducts.map((product, index) => (
                   <Link
                     key={product.id}
                     href={`/products/${product.id}`}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ${index === 0 ? 'first-product-link' : ''}`} // Add class to the first product
                   >
                     {product.name}
                   </Link>
@@ -101,46 +103,45 @@ const Navbar = () => {
             )}
           </form>
 
-          {/* Desktop Links */}
-          <div className="items-center hidden md:flex md:space-x-8 md:ml-10">
+
+          {/* Right Section with Menu */}
+          <div className="hidden md:flex items-center space-x-4">
             <Link
               href="/"
-              className="text-gray-700 hover:bg-gray-100  px-3 py-2 rounded-md text-sm font-medium"
+              className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium"
             >
               Home
             </Link>
             <Link
               href="/products"
-              className="text-gray-700 hover:bg-gray-100  px-3 py-2 rounded-md text-sm font-medium"
+              className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium"
             >
               Products
-            </Link>
-            <Link
-              href="/cart"
-              className="text-gray-700 hover:bg-gray-100  px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Cart
             </Link>
 
             {session?.user?.email ? (
               <>
                 <Link
-                    href="/profile"
-                    className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
-                  >
-                    Profile
-                  </Link>
-                  <p className="text-blue-500 block  rounded-md text-base font-bold">
-                    Hi, {session?.user?.firstName} {session?.user?.lastName}
-                  </p>
-
+                  href="/cart"
+                  className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Cart
+                </Link>
                 <Link
+                  href="/profile"
+                  className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Profile
+                </Link>
+                <p className="text-blue-500 block rounded-md text-sm font-bold">
+                  Hi, {session?.user?.firstName} {session?.user?.lastName}
+                </p>
+                <button
                   onClick={handleLogout}
-                  href=""
-                  className="text-red-700  hover:bg-gray-100  px-3 py-2 rounded-md text-sm font-bold"
+                  className="text-red-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-bold"
                 >
                   Logout
-                </Link>
+                </button>
               </>
             ) : (
               <Link
@@ -156,7 +157,7 @@ const Navbar = () => {
           <div className="flex md:hidden">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700  focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 focus:outline-none"
             >
               <svg
                 className="h-6 w-6"
@@ -202,18 +203,18 @@ const Navbar = () => {
               >
                 Products
               </Link>
-              <Link
-                href="/cart"
-                className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Cart
-              </Link>
 
 
               <hr className="border-gray-200 my-2" />
 
               {session?.user?.email ? (
                 <>
+                  <Link
+                    href="/cart"
+                    className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Cart
+                  </Link>
                   <Link
                     href="/profile"
                     className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
@@ -223,13 +224,12 @@ const Navbar = () => {
                   <p className="text-blue-500 block px-3 py-2 rounded-md text-base font-medium">
                     Hi, {session?.user?.firstName} {session?.user?.lastName}
                   </p>
-                  <Link
+                  <button
                     onClick={handleLogout}
-                    href=""
                     className="text-red-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium"
                   >
                     Logout
-                  </Link>
+                  </button>
                 </>
               ) : (
                 <Link
@@ -248,4 +248,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
