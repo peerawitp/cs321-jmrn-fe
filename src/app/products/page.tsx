@@ -2,18 +2,23 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { products, Product } from "@/data/products"; // นำเข้าข้อมูลจากไฟล์ products.ts
 import CategorySelection from "../components/CategorySelection"; // นำเข้า CategorySelection
 import ProductCard from "../components/ProductCard"; // นำเข้า ProductCard
+import useProduct from "@/api/user/useProduct";
+import { Product } from "@/interfaces/Product";
 
 const ProductsPage = () => {
   const searchParams = useSearchParams(); // ใช้สำหรับดึง query params
   const initialCategory = searchParams.get("category"); // ดึงค่าหมวดหมู่จาก URL
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    initialCategory,
+  );
+
+  const { data: products, isLoading, error } = useProduct();
 
   // ฟังก์ชันสำหรับการกรองสินค้าตามหมวดหมู่
   const filteredProducts = selectedCategory
-    ? products.filter((product) => product.tireType === selectedCategory)
+    ? products?.filter((product: Product) => product.type === selectedCategory)
     : products;
 
   // เมื่อพารามิเตอร์หมวดหมู่เปลี่ยน ให้ตั้งค่า selectedCategory ใหม่
@@ -32,14 +37,13 @@ const ProductsPage = () => {
       />
 
       {/* แสดงสินค้าตามหมวดหมู่ที่เลือก */}
-      {filteredProducts.length > 0 ? (
+      {filteredProducts && filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product: Product) => (
             <Link key={product.id} href={`/products/${product.id}`}>
               {/* ใช้ ProductCard แสดงผลสินค้า */}
-              
-                <ProductCard product={product} />
-      
+
+              <ProductCard product={product} />
             </Link>
           ))}
         </div>

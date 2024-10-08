@@ -1,15 +1,15 @@
-'use client'
-import { useState } from 'react';
-import { Product } from '../types/product';
+"use client";
+import { useState } from "react";
+import { Product } from "../types/product";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [newProduct, setNewProduct] = useState<Omit<Product, 'id'>>({
-    name: '',
-    description: '',
+  const [newProduct, setNewProduct] = useState<Omit<Product, "id">>({
+    name: "",
+    description: "",
     price: 0,
     stock: 0,
-    imageUrl: '',
+    imageUrl: "",
   });
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -25,7 +25,7 @@ const ProductsPage = () => {
 
   const updateProduct = (id: number) => {
     const updatedProducts = products.map((product) =>
-      product.id === id ? { ...product, ...newProduct } : product
+      product.id === id ? { ...product, ...newProduct } : product,
     );
     setProducts(updatedProducts);
     resetForm();
@@ -36,7 +36,13 @@ const ProductsPage = () => {
   };
 
   const resetForm = () => {
-    setNewProduct({ name: '', description: '', price: 0, stock: 0, imageUrl: '' });
+    setNewProduct({
+      name: "",
+      description: "",
+      price: 0,
+      stock: 0,
+      imageUrl: "",
+    });
     setImagePreview(null);
   };
 
@@ -62,28 +68,36 @@ const ProductsPage = () => {
           type="text"
           placeholder="Product Name"
           value={newProduct.name}
-          onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, name: e.target.value })
+          }
           className="border p-2 rounded"
         />
         <input
           type="text"
           placeholder="Description"
           value={newProduct.description}
-          onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, description: e.target.value })
+          }
           className="border p-2 rounded"
         />
         <input
           type="number"
           placeholder="Price"
           value={newProduct.price}
-          onChange={(e) => setNewProduct({ ...newProduct, price: Number(e.target.value) })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, price: Number(e.target.value) })
+          }
           className="border p-2 rounded"
         />
         <input
           type="number"
           placeholder="Stock"
           value={newProduct.stock}
-          onChange={(e) => setNewProduct({ ...newProduct, stock: Number(e.target.value) })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, stock: Number(e.target.value) })
+          }
           className="border p-2 rounded"
         />
 
@@ -95,12 +109,19 @@ const ProductsPage = () => {
         />
         {imagePreview && (
           <div className="mt-2">
-            <img src={imagePreview} alt="Product Preview" className="h-24 w-24 object-cover rounded" />
+            <img
+              src={imagePreview}
+              alt="Product Preview"
+              className="h-24 w-24 object-cover rounded"
+            />
           </div>
         )}
       </div>
 
-      <button onClick={addProduct} className="bg-blue-500 text-white p-2 rounded mb-4">
+      <button
+        onClick={addProduct}
+        className="bg-blue-500 text-white p-2 rounded mb-4"
+      >
         Add Product
       </button>
 
@@ -127,12 +148,12 @@ const ProductsPage = () => {
                     className="h-20 w-20 object-cover rounded"
                   />
                 ) : (
-                  'No Image'
+                  "No Image"
                 )}
               </td>
               <td className="border px-4 py-2">{product.name}</td>
               <td className="border px-4 py-2">{product.description}</td>
-              <td className="border px-4 py-2">${product.price}</td>
+              <td className="border px-4 py-2">{product.price} บาท</td>
               <td className="border px-4 py-2">{product.stock}</td>
               <td className="border px-4 py-2 space-x-2">
                 <button

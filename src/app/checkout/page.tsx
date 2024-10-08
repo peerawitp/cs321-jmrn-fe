@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { initialCart, CartItem } from "@/data/cartItem"; // ดึงข้อมูล CartItem
 import { findProductById } from "@/data/products"; // ดึงข้อมูล products
 import { addresses } from "@/data/addressData"; // ดึงข้อมูลที่อยู่
@@ -35,7 +35,9 @@ const CheckoutPage: React.FC = () => {
           <>
             {/* แสดงที่อยู่สำหรับการจัดส่ง */}
             <div className="mb-6">
-              <h2 className="text-lg font-bold mb-2">Select Shipping Address:</h2>
+              <h2 className="text-lg font-bold mb-2">
+                Select Shipping Address:
+              </h2>
               <select
                 onChange={handleAddressChange}
                 value={selectedAddress || ""}
@@ -44,7 +46,8 @@ const CheckoutPage: React.FC = () => {
                 <option value="">Select an address</option>
                 {addresses.map((address) => (
                   <option key={address.id} value={address.id}>
-                    {address.name}, {address.addressLine1}, {address.city}, {address.state}
+                    {address.name}, {address.addressLine1}, {address.city},{" "}
+                    {address.state}
                   </option>
                 ))}
               </select>
@@ -65,7 +68,7 @@ const CheckoutPage: React.FC = () => {
                         </p>
                         <p>{address.country}</p>
                       </div>
-                    ) : null
+                    ) : null,
                   )}
                 </div>
               )}
@@ -79,23 +82,37 @@ const CheckoutPage: React.FC = () => {
                 const productSize = product.sizes[0]; // ขนาดสินค้า
 
                 return (
-                  <div key={item.productId} className="flex items-center justify-between p-4 bg-gray-50 rounded shadow">
+                  <div
+                    key={item.productId}
+                    className="flex items-center justify-between p-4 bg-gray-50 rounded shadow"
+                  >
                     <div className="flex items-center space-x-4">
                       {/* แสดงรูปภาพสินค้า */}
-                      <img src={product.imageUrl} alt={product.name} className="w-20 h-20 object-cover rounded" />
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="w-20 h-20 object-cover rounded"
+                      />
                       <div>
                         <h3 className="text-lg font-bold">{product.name}</h3>
-                        <p className="text-gray-600">Tire Size: {productSize.tireSize}</p>
-                        <p className="text-gray-600">Price: ${productSize.price.toFixed(2)}</p>
+                        <p className="text-gray-600">
+                          Tire Size: {productSize.tireSize}
+                        </p>
+                        <p className="text-gray-600">
+                          Price: {productSize.price.toFixed(2)} บาท
+                        </p>
                       </div>
                     </div>
 
                     {/* แสดงจำนวนสินค้า */}
-                    <div className="text-gray-700">Quantity: {item.quantity}</div>
+                    <div className="text-gray-700">
+                      Quantity: {item.quantity}
+                    </div>
 
                     {/* ราคารวมต่อสินค้า */}
                     <div className="text-gray-700 font-semibold">
-                      Total: ${(productSize.price * item.quantity).toFixed(2)}
+                      Total: {(productSize.price * item.quantity).toFixed(2)}{" "}
+                      บาท
                     </div>
                   </div>
                 );
@@ -104,9 +121,13 @@ const CheckoutPage: React.FC = () => {
 
             {/* ราคารวมทั้งหมด */}
             <div className="mt-6 text-right">
-              <p className="text-xl font-semibold">Total: ${calculateTotalPrice().toFixed(2)}</p>
-              <button className="mt-4 px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-              onClick={() => router.push('/order-confirmation')}>
+              <p className="text-xl font-semibold">
+                Total: ${calculateTotalPrice().toFixed(2)}
+              </p>
+              <button
+                className="mt-4 px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                onClick={() => router.push("/order-confirmation")}
+              >
                 Confirm Purchase
               </button>
             </div>

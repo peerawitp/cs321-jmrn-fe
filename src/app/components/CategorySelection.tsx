@@ -15,7 +15,7 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({
     <div className="flex space-x-4 mb-6 text-white">
       {categories.map((category) => (
         <button
-          key={category.value || "all"}
+          key={category.value || null}
           onClick={() => setSelectedCategory(category.value)}
           className={`px-4 py-2 rounded-md bg-gray-500 ${
             selectedCategory === category.value

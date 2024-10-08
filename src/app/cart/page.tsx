@@ -1,10 +1,10 @@
 "use client";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { initialCart, CartItem } from "@/data/cartItem";
 import { findProductById } from "@/data/products";
-import CartItemUpdater from '../components/CartItemUpdater';  // นำเข้าคอมโพเนนต์ที่สร้างใหม่
-import Image from "next/image";  // นำเข้า Image component
+import CartItemUpdater from "../components/CartItemUpdater"; // นำเข้าคอมโพเนนต์ที่สร้างใหม่
+import Image from "next/image"; // นำเข้า Image component
 
 const Cart: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCart); // ใช้ข้อมูลตะกร้าเริ่มต้นจาก cartItem.ts
@@ -14,7 +14,9 @@ const Cart: React.FC = () => {
   const calculateTotalPrice = () => {
     return cartItems.reduce((total, item) => {
       const product = findProductById(item.productId); // ค้นหาสินค้าตาม productId
-      const sizeInfo = product?.sizes.find((size) => size.tireSize === item.size); // ค้นหาขนาดสินค้า
+      const sizeInfo = product?.sizes.find(
+        (size) => size.tireSize === item.size,
+      ); // ค้นหาขนาดสินค้า
       return sizeInfo ? total + sizeInfo.price * item.quantity : total; // คำนวณราคาตามจำนวนสินค้า
     }, 0);
   };
@@ -25,8 +27,8 @@ const Cart: React.FC = () => {
       prevCartItems.map((item) =>
         item.productId === productId && item.size === size
           ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
@@ -36,8 +38,8 @@ const Cart: React.FC = () => {
       prevCartItems.map((item) =>
         item.productId === productId && item.size === size && item.quantity > 1
           ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
@@ -56,16 +58,21 @@ const Cart: React.FC = () => {
               {cartItems.map((item) => {
                 const product = findProductById(item.productId); // ค้นหาสินค้าตาม productId
                 if (!product) return null; // ถ้าไม่เจอสินค้าก็ข้ามไป
-                const productSize = product.sizes.find((size) => size.tireSize === item.size); // ขนาดสินค้า
+                const productSize = product.sizes.find(
+                  (size) => size.tireSize === item.size,
+                ); // ขนาดสินค้า
 
                 return (
-                  <div key={`${item.productId}-${item.size}`} className="flex items-center justify-between p-4 bg-gray-50 rounded shadow">
+                  <div
+                    key={`${item.productId}-${item.size}`}
+                    className="flex items-center justify-between p-4 bg-gray-50 rounded shadow"
+                  >
                     {/* แสดงรูปภาพสินค้า */}
                     <div className="flex items-center space-x-4">
                       <Image
-                        src={product.imageUrl}  // ใช้รูปภาพของสินค้าจากข้อมูลสินค้า
+                        src={product.imageUrl} // ใช้รูปภาพของสินค้าจากข้อมูลสินค้า
                         alt={product.name}
-                        width={100}  // กำหนดขนาดความกว้างของรูปภาพ
+                        width={100} // กำหนดขนาดความกว้างของรูปภาพ
                         height={100} // กำหนดขนาดความสูงของรูปภาพ
                         className="rounded"
                       />
@@ -88,7 +95,9 @@ const Cart: React.FC = () => {
                     {/* แสดงราคาสินค้าตามขนาด */}
                     <div className="text-right">
                       {productSize && (
-                        <p className="text-gray-600">Price: ${productSize.price.toFixed(2)}</p>
+                        <p className="text-gray-600">
+                          Price: {productSize.price.toFixed(2)} บาท
+                        </p>
                       )}
                     </div>
                   </div>
@@ -98,12 +107,14 @@ const Cart: React.FC = () => {
 
             {/* ราคารวมทั้งหมด */}
             <div className="mt-6 text-right">
-              <p className="text-xl font-semibold">Total: ${calculateTotalPrice().toFixed(2)}</p>
+              <p className="text-xl font-semibold">
+                Total: {calculateTotalPrice().toFixed(2)} บาท
+              </p>
               <button
-                onClick={() => router.push('/checkout')}
+                onClick={() => router.push("/checkout")}
                 className="mt-4 px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
               >
-                Checkout   
+                Checkout
               </button>
             </div>
           </>
