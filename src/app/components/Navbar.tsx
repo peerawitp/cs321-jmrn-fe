@@ -2,15 +2,16 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { products, Product } from "@/data/products"; // adjust the path as necessary
 import { signOut, useSession } from "next-auth/react";
+import useProduct from "@/api/user/useProduct";
+import { Product } from "@/interfaces/Product";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const dropdownRef = useRef(null); // Reference to the dropdown
-
+  const { data: products, isLoading, error } = useProduct();
   const { data: session } = useSession();
 
   const toggleMenu = () => {

@@ -1,17 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import useProduct from "@/api/user/useProduct";
 import { ProductSize } from "@/interfaces/Product";
+import { signOut, useSession } from "next-auth/react";
 
 export default function ProductPage() {
+  const [isMounted, setIsMounted] = useState(false); // New state for checking client-side rendering
   const { productId } = useParams();
-
   const { data: products, isLoading, error } = useProduct();
-
   const [selectedSize, setSelectedSize] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
+  const { data: session } = useSession();
+
+  // Ensure it's rendered on client-side only
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null; // Prevent rendering on server
+  }
 
   if (isLoading) {
     return <p className="text-center mt-8">Loading...</p>;
@@ -23,6 +34,9 @@ export default function ProductPage() {
     const selectedTireSize = product?.productSizes.find(
       (size: ProductSize) => size.name === e.target.value,
     );
+    if (quantity > selectedTireSize?.quantity) {
+      setQuantity(selectedTireSize?.quantity || 1);
+    }
     setSelectedSize(selectedTireSize);
   };
 
@@ -121,13 +135,24 @@ export default function ProductPage() {
             +
           </button>
         </div>
+        <div className="mt-6 flex justify-center items-center space-x-4">
+          {session ? (
+            <button
+              onClick={handleAddToCart}
+              className="mt-6 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex justify-center items-center text-center"
+            >
+              Add to Cart
+            </button>
+          ) : (
+            <Link
+              href="/auth"
+              className="mt-6 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex justify-center items-center text-center"
+            >
+              Login to Add to Cart
+            </Link>
+          )}
+        </div>
 
-        <button
-          onClick={handleAddToCart}
-          className="mt-6 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-        >
-          Add to Cart
-        </button>
       </div>
     )
   );
