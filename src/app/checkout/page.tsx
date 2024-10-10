@@ -4,12 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { initialCart, CartItem } from "@/data/cartItem"; // ดึงข้อมูล CartItem
 import { findProductById } from "@/data/products"; // ดึงข้อมูล products
-import addressData from "@/data/addressData"; // ดึงข้อมูลที่อยู่
+import useUserInfo from "@/api/user/useUserInfo";
 
 const CheckoutPage: React.FC = () => {
   const [cartItems] = useState<CartItem[]>(initialCart); // ใช้ initialCart สำหรับรายการสินค้าในตะกร้า
-  const [selectedAddress, setSelectedAddress] = useState<number | null>(null); // เก็บข้อมูลที่อยู่ที่เลือก
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState<number | null>(null); // เก็บข้อมูลที่อยู่ที่เลือก
   const router = useRouter();
+  const { data: userInfo, isLoading, error } = useUserInfo();
 
   // ฟังก์ชันคำนวณราคารวม
   const calculateTotalPrice = () => {
@@ -21,7 +22,7 @@ const CheckoutPage: React.FC = () => {
 
   // ฟังก์ชันจัดการการเลือกที่อยู่
   const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedAddress(Number(e.target.value));
+    setSelectedAddressIndex(Number(e.target.value));
   };
 
   return (
@@ -39,33 +40,32 @@ const CheckoutPage: React.FC = () => {
               <h2 className="text-lg font-bold mb-2">Select Shipping Address:</h2>
               <select
                 onChange={handleAddressChange}
-                value={selectedAddress || ""}
+                value={selectedAddressIndex !== null ? selectedAddressIndex : ""}
                 className="block w-full p-2 border border-gray-300 rounded-md"
               >
                 <option value="">Select an address</option>
-                {addressData.map((address) => (
-                  <option key={address.id} value={address.id}>
-                    {address.houseNumber} {address.village && `${address.village}`}, {address.alley && `${address.alley}`}, {address.street}, {address.subDistrict}, {address.district}, {address.province}, {address.postalCode}
-                  </option>
-                ))}
+                {/* ดึงที่อยู่จาก userInfo */}
+                {userInfo && userInfo.addresses.length > 0 ? (
+                  userInfo.addresses.map((address: any, index: number) => (
+                    <option key={index} value={index}>
+                      {address.houseNumber}, {address.village}, {address.street}, {address.subDistrict}, {address.district}, {address.province}, {address.postalCode}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>No addresses found.</option>
+                )}
               </select>
 
               {/* แสดงรายละเอียดที่อยู่ที่เลือก */}
-              {selectedAddress && (
+              {selectedAddressIndex !== null && userInfo?.addresses[selectedAddressIndex] && (
                 <div className="mt-4 p-4 border border-gray-300 rounded-md bg-gray-50">
-                  {addressData
-                    .filter((address) => address.id === selectedAddress)
-                    .map((address) => (
-                      <div key={address.id}>
-                        <p><strong>Address:</strong></p>
-                        <p>{address.houseNumber} {address.village && `${address.village}`}</p>
-                        {address.alley && <p>Alley: {address.alley}</p>}
-                        <p>Street: {address.street}</p>
-                        <p>Sub Distruct: {address.subDistrict}, District: {address.district}, Province: {address.province}</p>
-                        <p>Postal Code: {address.postalCode}</p>
-                        <p>Country: {address.country}</p>
-                      </div>
-                    ))}
+                  <p><strong>Address:</strong></p>
+                  <p>{userInfo.addresses[selectedAddressIndex].houseNumber} {userInfo.addresses[selectedAddressIndex].village}</p>
+                  {userInfo.addresses[selectedAddressIndex].alley && <p>Alley: {userInfo.addresses[selectedAddressIndex].alley}</p>}
+                  <p>Street: {userInfo.addresses[selectedAddressIndex].street}</p>
+                  <p>Sub District: {userInfo.addresses[selectedAddressIndex].subDistrict}, District: {userInfo.addresses[selectedAddressIndex].district}, Province: {userInfo.addresses[selectedAddressIndex].province}</p>
+                  <p>Postal Code: {userInfo.addresses[selectedAddressIndex].postalCode}</p>
+                  <p>Country: {userInfo.addresses[selectedAddressIndex].country}</p>
                 </div>
               )}
             </div>
