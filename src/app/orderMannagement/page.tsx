@@ -1,91 +1,116 @@
-import React from "react";
+"use client"; // Mark the component as a Client Component
+
+import React, { useState } from "react";
+
+enum OrderStatus {
+  PAYMENT_PENDING = "Payment Pending",
+  PAYMENT_CONFIRMED = "Payment Confirmed",
+  PREPARING = "Preparing",
+  SHIPPED = "Shipped",
+  DELIVERED = "Delivered",
+  CANCELLED = "Cancelled",
+}
+
+interface Order {
+  id: number;
+  customerName: string;
+  address: string;
+  status: OrderStatus;
+  createdAt: Date; 
+}
+
+const orders: Order[] = [
+  {
+    id: 1,
+    customerName: "Peerawit",
+    address: "Victory Monument",
+    status: OrderStatus.PAYMENT_PENDING,
+    createdAt: new Date("2023-10-01T10:00:00"),
+  },
+  {
+    id: 2,
+    customerName: "Tanawat",
+    address: "Rangsit",
+    status: OrderStatus.PREPARING,
+    createdAt: new Date("2023-10-03T12:00:00"),
+  },
+  {
+    id: 3,
+    customerName: "Nakorn",
+    address: "Pinkao",
+    status: OrderStatus.SHIPPED,
+    createdAt: new Date("2023-10-02T14:00:00"),
+  },
+  {
+    id: 4,
+    customerName: "Narisara",
+    address: "Phayathai",
+    status: OrderStatus.DELIVERED,
+    createdAt: new Date("2023-10-04T16:00:00"),
+  },
+];
 
 const OrderManagement = () => {
-  const orders = [
-    {
-      id: 1,
-      name: "Peerawit",
-      description: "High-performance tire",
-      tireSize: "225/45R17",
-      pattern: "All-Season",
-      diameter: 650,
-      width: 225,
-      measurementRim: "17x7.5",
-      standardRim: "17x7",
-      wheel: "Alloy",
-      type: "Passenger",
-      quantity: 10,
-      price: 3000,
-      createdAt: "2024-01-01T10:00:00",
-    },
-    {
-      id: 2,
-      name: "Tanawat",
-      description: "Durable off-road tire",
-      tireSize: "265/70R16",
-      pattern: "Mud-Terrain",
-      diameter: 774,
-      width: 265,
-      measurementRim: "16x8",
-      standardRim: "16x7",
-      wheel: "Steel",
-      type: "SUV",
-      quantity: 15,
-      price: 4500,
-      createdAt: "2024-02-01T11:30:00",
-    },
-  ];
+  const [searchId, setSearchId] = useState<string>("");
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchId(e.target.value);
+  };
+
+  const getFilteredOrders = () => {
+    if (searchId.trim() === "") {
+      return [...orders].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    }
+    const id = parseInt(searchId);
+    if (isNaN(id)) return [];
+    return orders.filter((order) => order.id === id);
+  };
+
+ const renderOrders = (filteredOrders: Order[]) => {
+    return filteredOrders.length > 0 ? (
+      filteredOrders.map((order) => (
+        <div
+          key={order.id}
+          className="flex justify-between items-center p-4 bg-white rounded shadow mb-2"
+        >
+          {/* Left Side: Order ID and View Button*/}
+          <div className="w-1/4">
+            <span className="block text-sm font-bold">Order ID: {order.id}</span>
+            <button className="mt-2 text-blue-500 text-sm">View Order</button>
+          </div>
+
+          {/* Middle: Customer Name and Address */}
+          <div className="flex flex-col items-center justify-center w-2/4 text-center">
+            <span className="block text-sm font-bold">{order.customerName}</span>
+            <span className="block text-xs text-gray-500">{order.address}</span>
+          </div>
+
+          {/* Right Side: Order Status */}
+          <div className="w-1/4 flex flex-col items-end">
+            <span className="block text-sm font-bold">{order.status}</span>
+          </div>
+        </div>
+      ))
+    ) : (
+      <div>No orders found.</div>
+    );
+  };
 
   return (
     <div className="container mx-auto my-8">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Order Management</h1>
-        <div className="flex space-x-2">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
-          <button className="bg-gray-300 px-4 py-2 rounded">Update</button>
-          <button className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
-        </div>
+      <h1 className="text-2xl font-bold mb-4">Order Management</h1>
+
+      {/* Search Bar */}
+      <div className="mb-6">
+        <input
+          type="text"
+          value={searchId}
+          onChange={handleSearchChange}
+          placeholder="Search by Order ID"
+          className="border rounded p-2 w-full mb-4"
+        />
+        {renderOrders(getFilteredOrders())}
       </div>
-      <table className="min-w-full bg-white">
-        <thead>
-          <tr>
-            <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">Name</th>
-            <th className="px-4 py-2">Description</th>
-            <th className="px-4 py-2">Tire Size</th>
-            <th className="px-4 py-2">Pattern & Type</th>
-            <th className="px-4 py-2">Overall Diameter</th>
-            <th className="px-4 py-2">Overall Width</th>
-            <th className="px-4 py-2">Measurement Rim</th>
-            <th className="px-4 py-2">Standard Rim</th>
-            <th className="px-4 py-2">Wheel</th>
-            <th className="px-4 py-2">Type</th>
-            <th className="px-4 py-2">Quantity</th>
-            <th className="px-4 py-2">Price</th>
-            <th className="px-4 py-2">Created At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id} className="border-b">
-              <td className="px-4 py-2">{order.id}</td>
-              <td className="px-4 py-2">{order.name}</td>
-              <td className="px-4 py-2">{order.description}</td>
-              <td className="px-4 py-2">{order.tireSize}</td>
-              <td className="px-4 py-2">{order.pattern}</td>
-              <td className="px-4 py-2">{order.diameter}</td>
-              <td className="px-4 py-2">{order.width}</td>
-              <td className="px-4 py-2">{order.measurementRim}</td>
-              <td className="px-4 py-2">{order.standardRim}</td>
-              <td className="px-4 py-2">{order.wheel}</td>
-              <td className="px-4 py-2">{order.type}</td>
-              <td className="px-4 py-2">{order.quantity}</td>
-              <td className="px-4 py-2">{order.price}</td>
-              <td className="px-4 py-2">{new Date(order.createdAt).toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 };
