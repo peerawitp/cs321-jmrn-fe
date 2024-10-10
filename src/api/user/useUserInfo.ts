@@ -18,7 +18,6 @@ const useUserInfo = () => {
   return useQuery<UserInfo>({
     queryKey: ["user", "info"],
     queryFn: getInfo,
-    staleTime: 5 * 60 * 1000,
   });
 };
 

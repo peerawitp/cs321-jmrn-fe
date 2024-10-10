@@ -24,24 +24,24 @@ const Navbar = () => {
 
     // Filter products based on the search query
     const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(query.toLowerCase())
+      product.name.toLowerCase().includes(query.toLowerCase()),
     );
     setFilteredProducts(filtered);
   };
-
 
   const handleSearchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log("Search for:", searchQuery);
     if (filteredProducts.length > 0) {
       // Find the first product's link and trigger a click
-      const firstLink = document.querySelector<HTMLAnchorElement>('.first-product-link');
+      const firstLink = document.querySelector<HTMLAnchorElement>(
+        ".first-product-link",
+      );
       if (firstLink) {
         firstLink.click();
       }
     }
   };
-
 
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -95,7 +95,7 @@ const Navbar = () => {
                   <Link
                     key={product.id}
                     href={`/products/${product.id}`}
-                    className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ${index === 0 ? 'first-product-link' : ''}`} // Add class to the first product
+                    className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ${index === 0 ? "first-product-link" : ""}`} // Add class to the first product
                   >
                     {product.name}
                   </Link>
@@ -103,7 +103,6 @@ const Navbar = () => {
               </div>
             )}
           </form>
-
 
           {/* Right Section with Menu */}
           <div className="hidden md:flex items-center space-x-4">
@@ -204,7 +203,6 @@ const Navbar = () => {
               >
                 Products
               </Link>
-
 
               <hr className="border-gray-200 my-2" />
 
