@@ -1,11 +1,24 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { orderHistory } from "@/data/orderHistory";
+import { orderHistory as initialOrderHistory } from "@/data/orderHistory";
 import { findProductById } from "@/data/products"; // ฟังก์ชันสำหรับค้นหาสินค้าจาก productId
 
 const OrderHistory: React.FC = () => {
+  const [orderHistory, setOrderHistory] = useState(initialOrderHistory);
   const router = useRouter();
+
+  const confirmDelivery = (e: React.MouseEvent, orderId: string) => {
+    // หยุดไม่ให้อีเวนต์การคลิกแพร่กระจายไปยังการ์ด
+    e.stopPropagation();
+
+    // อัปเดตสถานะคำสั่งซื้อใน orderHistory เป็น "Delivered"
+    const updatedOrders = orderHistory.map((order) =>
+      order.orderId === orderId ? { ...order, status: "Delivered" } : order
+    );
+    setOrderHistory(updatedOrders);
+    alert("Thank you for confirming the delivery!");
+  };
 
   const handleCardClick = (orderId: string) => {
     router.push(`/order-history/${orderId}`);
@@ -41,7 +54,7 @@ const OrderHistory: React.FC = () => {
                     {order.items.map((item, index) => {
                       const product = findProductById(item.productId); // ดึงข้อมูลสินค้าจาก productId
                       const productSize = product?.sizes.find(
-                        (size) => size.tireSize === item.size,
+                        (size) => size.tireSize === item.size
                       );
 
                       // ตรวจสอบว่าข้อมูลสินค้ามีอยู่หรือไม่
@@ -53,12 +66,22 @@ const OrderHistory: React.FC = () => {
 
                       return (
                         <li key={index}>
-                          {product.name} ({item.size}) - Quantity:{" "}
-                          {item.quantity} - Price: {productSize.price} บาท
+                          {product.name} ({item.size}) - Quantity: {item.quantity} - Price:{" "}
+                          {productSize.price} บาท
                         </li>
                       );
                     })}
                   </ul>
+                  {order.status === "Shipped" && (
+                    <div className="relative mt-4">
+                      <button
+                        onClick={(e) => confirmDelivery(e, order.orderId)} // ส่งอีเวนต์และ orderId
+                        className="absolute right-0 bottom-0 px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600"
+                      >
+                        Confirm Delivery
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

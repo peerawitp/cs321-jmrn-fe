@@ -67,10 +67,17 @@ const Profile = () => {
             ))}
         </div>
 
-        {/* ปุ่มไปยังหน้า Order History */}
-        <div className="text-center">
+        {/* ปุ่มจัดวางในแนวนอน */}
+        <div className="flex justify-center space-x-4">
           <button
-            onClick={() => router.push('/order-history')} // เพิ่มการนำทางไปยังหน้า order-history
+            onClick={() => router.push('profile/address')}
+            className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            My Address
+          </button>
+          
+          <button
+            onClick={() => router.push('/order-history')}
             className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
             View Order History
