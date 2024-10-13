@@ -2,15 +2,15 @@
 
 interface CartItemUpdaterProps {
   productId: number;
-  size: string;
+  productSizeId: number;
   quantity: number;
-  increaseQuantity: (productId: number, size: string) => void;
-  decreaseQuantity: (productId: number, size: string) => void;
+  increaseQuantity: (productId: number, productSizeId: number) => void;
+  decreaseQuantity: (productId: number, productSizeId: number) => void;
 }
 
 const CartItemUpdater: React.FC<CartItemUpdaterProps> = ({
   productId,
-  size,
+  productSizeId,
   quantity,
   increaseQuantity,
   decreaseQuantity,
@@ -18,14 +18,14 @@ const CartItemUpdater: React.FC<CartItemUpdaterProps> = ({
   return (
     <div className="flex items-center space-x-4">
       <button
-        onClick={() => decreaseQuantity(productId, size)}
+        onClick={() => decreaseQuantity(productId, productSizeId)}
         className="px-3 py-1 text-gray-700 bg-gray-200 rounded"
       >
         -
       </button>
       <span>{quantity}</span>
       <button
-        onClick={() => increaseQuantity(productId, size)}
+        onClick={() => increaseQuantity(productId, productSizeId)}
         className="px-3 py-1 text-gray-700 bg-gray-200 rounded"
       >
         +

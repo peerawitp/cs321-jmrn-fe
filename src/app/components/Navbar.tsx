@@ -5,6 +5,7 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import useProduct from "@/api/user/useProduct";
 import { Product } from "@/interfaces/Product";
+import { useCartStore } from "@/stores/useCartStore";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +14,8 @@ const Navbar = () => {
   const dropdownRef = useRef(null); // Reference to the dropdown
   const { data: products, isLoading, error } = useProduct();
   const { data: session } = useSession();
+
+  const cartStore = useCartStore();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -23,10 +26,10 @@ const Navbar = () => {
     setSearchQuery(query);
 
     // Filter products based on the search query
-    const filtered = products.filter((product) =>
+    const filtered = products?.filter((product) =>
       product.name.toLowerCase().includes(query.toLowerCase()),
     );
-    setFilteredProducts(filtered);
+    // setFilteredProducts(filtered);
   };
 
   const handleSearchSubmit = (event: React.FormEvent) => {
@@ -126,6 +129,11 @@ const Navbar = () => {
                   className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Cart
+                  {cartStore.cartItems.length > 0 && (
+                    <span className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">
+                      {cartStore.cartItems.length}
+                    </span>
+                  )}
                 </Link>
                 <Link
                   href="/profile"

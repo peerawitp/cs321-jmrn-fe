@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import useProduct from "@/api/user/useProduct";
 import { ProductSize } from "@/interfaces/Product";
 import { signOut, useSession } from "next-auth/react";
+import { useCartStore } from "@/stores/useCartStore";
 
 export default function ProductPage() {
   const [isMounted, setIsMounted] = useState(false); // New state for checking client-side rendering
@@ -14,6 +15,10 @@ export default function ProductPage() {
   const [selectedSize, setSelectedSize] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const { data: session } = useSession();
+
+  const { cartItems, addToCart } = useCartStore();
+
+  console.log("cartItems:", cartItems);
 
   // Ensure it's rendered on client-side only
   useEffect(() => {
@@ -34,7 +39,7 @@ export default function ProductPage() {
     const selectedTireSize = product?.productSizes.find(
       (size: ProductSize) => size.name === e.target.value,
     );
-    if (quantity > selectedTireSize?.quantity) {
+    if (quantity > selectedTireSize?.quantity!) {
       setQuantity(selectedTireSize?.quantity || 1);
     }
     setSelectedSize(selectedTireSize);
@@ -58,15 +63,15 @@ export default function ProductPage() {
     }
 
     const cartItem = {
-      productId: product?.id,
-      name: product?.name,
-      size: selectedSize.tireSize,
+      productId: product?.id || 0,
+      productSizeId: selectedSize.id,
       quantity: quantity,
       price: selectedSize.price,
-      totalPrice: selectedSize.price * quantity,
+      totalPrice: quantity * selectedSize.price,
     };
 
     console.log("Added to cart:", JSON.stringify(cartItem, null, 2));
+    addToCart(cartItem);
   };
 
   return (
@@ -152,7 +157,6 @@ export default function ProductPage() {
             </Link>
           )}
         </div>
-
       </div>
     )
   );
