@@ -1,4 +1,4 @@
-enum OrderStatus {
+export enum OrderStatus {
   PROCESSING = "PROCESSING",
   WAITING_PAYMENT = "WAITING_PAYMENT",
   PREPARING = "PREPARING",
@@ -6,7 +6,7 @@ enum OrderStatus {
   SUCCESS = "SUCCESS",
 }
 
-interface Order {
+export interface Order {
   id: number;
   userId: string;
   addressId: number;

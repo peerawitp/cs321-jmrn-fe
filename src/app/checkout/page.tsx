@@ -2,21 +2,23 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { findProductById } from "@/data/products"; // ดึงข้อมูล products
 import useUserInfo from "@/api/user/useUserInfo";
 import { useCartStore } from "@/stores/useCartStore";
 import useProduct from "@/api/user/useProduct";
 
+import useConfirmPurchase from "@/api/user/useConfirmPurchase";
+
 const CheckoutPage: React.FC = () => {
-  const { cartItems } = useCartStore();
+  const { cartItems, clearCart } = useCartStore();
   const { data: products } = useProduct();
+
+  const confirmPurchaseMutation = useConfirmPurchase();
 
   const [selectedAddressIndex, setSelectedAddressIndex] = useState<
     number | null
   >(null); // เก็บข้อมูลที่อยู่ที่เลือก
   const router = useRouter();
   const { data: userInfo, isLoading, error } = useUserInfo();
-
   // ฟังก์ชันคำนวณราคารวม
   const calculateTotalPrice = () => {
     return cartItems.reduce((total, item) => {
@@ -32,6 +34,35 @@ const CheckoutPage: React.FC = () => {
   // ฟังก์ชันจัดการการเลือกที่อยู่
   const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAddressIndex(Number(e.target.value));
+  };
+
+  const handleConfirmPurchase = async () => {
+    if (selectedAddressIndex === null) {
+      alert("Please select an address.");
+      return;
+    }
+
+    const data = {
+      addressId: userInfo?.addresses[selectedAddressIndex].id || 0,
+      orderItems: cartItems.map((item) => ({
+        productId: item.productId,
+        productSizeId: item.productSizeId,
+        quantity: item.quantity,
+      })),
+    };
+
+    await confirmPurchaseMutation.mutateAsync(data, {
+      onSuccess: () => {
+        // Remove items from cart
+        clearCart();
+
+        alert("Order created successfully!");
+        router.push("/order-history");
+      },
+      onError: (error) => {
+        alert("An error occurred. " + error.message);
+      },
+    });
   };
 
   return (
@@ -164,7 +195,7 @@ const CheckoutPage: React.FC = () => {
               </p>
               <button
                 className="mt-4 px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-                onClick={() => router.push("/order-confirmation")}
+                onClick={handleConfirmPurchase}
               >
                 Confirm Purchase
               </button>

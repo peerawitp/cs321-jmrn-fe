@@ -7,6 +7,7 @@ interface CartStoreState {
   increaseQuantity: (productId: number, productSizeId: number) => void;
   decreaseQuantity: (productId: number, productSizeId: number) => void;
   removeItem: (productId: number, productSizeId: number) => void;
+  clearCart: () => void;
 }
 
 export const useCartStore = create<CartStoreState>()(
@@ -74,6 +75,9 @@ export const useCartStore = create<CartStoreState>()(
           }
           return { cartItems: state.cartItems };
         });
+      },
+      clearCart: () => {
+        set({ cartItems: [] });
       },
     }),
     {

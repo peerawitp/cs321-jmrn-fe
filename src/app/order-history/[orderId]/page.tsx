@@ -1,27 +1,45 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { orderHistory } from "@/data/orderHistory"; // ดึงข้อมูลจาก orderHistory
-import { findProductById } from "@/data/products"; // ใช้สำหรับค้นหาข้อมูลสินค้าจาก productId
 import Image from "next/image";
+import useOrderHistory from "@/api/user/useOrderHistory";
+import useProduct from "@/api/user/useProduct";
+import useUserInfo from "@/api/user/useUserInfo";
+
+import { Order, OrderStatus } from "@/interfaces/Order";
+import { getOrderStatusText } from "@/lib/orderStatusText";
 
 const OrderDetail: React.FC = () => {
   const { orderId } = useParams();
   const router = useRouter();
+  const { data: orderHistory, isLoading, error } = useOrderHistory();
+  const { data: products } = useProduct();
+  const { data: userInfo } = useUserInfo();
 
-  // ค้นหาคำสั่งซื้อที่ตรงกับ orderId
-  const [order, setOrder] = useState(
-    orderHistory.find((o) => o.orderId === orderId),
-  );
+  const [order, setOrder] = useState<Order | null>(null);
 
-  if (!order) {
-    return <div className="min-h-screen p-8 text-center">Order not found</div>;
+  useEffect(() => {
+    if (orderHistory && userInfo) {
+      const foundOrder = orderHistory.find(
+        (order) => order.id === Number(orderId),
+      );
+      setOrder(foundOrder || null);
+    }
+  }, [orderHistory, orderId, userInfo]);
+
+  if (isLoading) {
+    return <div className="min-h-screen p-8 text-center">Loading...</div>;
   }
 
-  // ฟังก์ชันสำหรับยืนยันการรับสินค้า
+  if (error || !order) {
+    return <div className="min-h-screen p-8 text-center">Order not found.</div>;
+  }
+
+  const shippingAddress = userInfo?.addresses.find(
+    (address) => address.id === order.addressId,
+  );
+
   const confirmDelivery = () => {
-    // ในการใช้งานจริง อาจจะต้องเรียก API เพื่อตั้งสถานะให้เป็น delivered
-    setOrder({ ...order, status: "Delivered" });
     alert("Thank you for confirming the delivery!");
   };
 
@@ -29,32 +47,35 @@ const OrderDetail: React.FC = () => {
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-lg">
         <h1 className="text-3xl font-bold mb-6 text-center">
-          Order #{order.orderId}
+          Order #{order.id}
         </h1>
         <p className="text-lg text-center mb-6">
           Here are the details of your order.
         </p>
 
-        {/* รายละเอียดคำสั่งซื้อ */}
         <div className="bg-gray-50 p-6 rounded mb-6 shadow-md">
           <h2 className="text-xl font-bold mb-4">Order Details</h2>
-          <p className="text-gray-700">Order Date: {order.date}</p>
-          <p className="text-gray-700 mb-4">
-            Total: {order.total.toFixed(2)} บาท
+          <p className="text-gray-700">
+            Order Date: {order.createdAt.toLocaleString()}
           </p>
           <p className="text-gray-700 mb-4">
-            Status: <span className="font-semibold">{order.status}</span>
+            Total: {order.totalAmount.toFixed(2)} บาท
+          </p>
+          <p className="text-gray-700 mb-4">
+            Status:{" "}
+            <span className="font-semibold">
+              {getOrderStatusText(order.status)}
+            </span>
           </p>
 
           <div className="mt-4">
             <h3 className="text-lg font-semibold mb-2">Items in your order:</h3>
             <ul className="space-y-4">
-              {order.items.map((item, index) => {
-                const product = findProductById(item.productId); // ดึงข้อมูลสินค้าจาก productId
-                const productSize = product?.sizes.find(
-                  (size) => size.tireSize === item.size,
+              {order.orderItems.map((item, index) => {
+                const product = products?.find((p) => p.id === item.productId);
+                const productSize = product?.productSizes.find(
+                  (size) => size.id === item.productSizeId,
                 );
-
                 return (
                   <li key={index} className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
@@ -73,7 +94,7 @@ const OrderDetail: React.FC = () => {
                       </div>
                     </div>
                     <p className="text-lg font-semibold">
-                      {(productSize?.price * item.quantity).toFixed(2)} บาท
+                      {(productSize?.price! * item.quantity).toFixed(2)} บาท
                     </p>
                   </li>
                 );
@@ -82,23 +103,23 @@ const OrderDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* ข้อมูลการจัดส่ง */}
         <div className="bg-gray-50 p-6 rounded mb-6 shadow-md">
           <h3 className="text-lg font-semibold mb-2">Shipping Information</h3>
-          <p>{order.shippingAddress.fullName}</p>
           <p>
-            {order.shippingAddress.addressLine1},{" "}
-            {order.shippingAddress.addressLine2}
+            {userInfo?.firstName} {userInfo?.lastName}
           </p>
           <p>
-            {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
-            {order.shippingAddress.postalCode}
+            {shippingAddress?.houseNumber} {shippingAddress?.village}{" "}
+            {shippingAddress?.alley ? `Alley ${shippingAddress?.alley}` : ""}{" "}
           </p>
-          <p>{order.shippingAddress.country}</p>
+          <p>
+            {shippingAddress?.subDistrict} {shippingAddress?.district}{" "}
+            {shippingAddress?.postalCode}
+          </p>
+          <p>{shippingAddress?.country}</p>
         </div>
 
-        {/* ปุ่มยืนยันการรับสินค้าเฉพาะคำสั่งซื้อที่สถานะเป็น "Shipped" */}
-        {order.status === "Shipped" && (
+        {order.status === OrderStatus.SHIPPED && (
           <div className="text-center mt-4">
             <button
               onClick={confirmDelivery}
@@ -109,7 +130,6 @@ const OrderDetail: React.FC = () => {
           </div>
         )}
 
-        {/* ปุ่มกลับไปยัง Order History */}
         <div className="text-center mt-8">
           <button
             onClick={() => router.push("/order-history")}

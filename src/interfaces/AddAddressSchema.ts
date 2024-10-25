@@ -2,7 +2,7 @@ export default interface AddAddressSchema {
   houseNumber: string;
   village: string | null;
   alley: string | null;
-  street: string;
+  street: string | null;
   subDistrict: string;
   district: string;
   province: string;

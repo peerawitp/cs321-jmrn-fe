@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import useOrderHistory from "@/api/user/useOrderHistory";
 import useProduct from "@/api/user/useProduct";
+import { OrderStatus } from "@/interfaces/Order";
+import { getOrderStatusText } from "@/lib/orderStatusText";
 
 const OrderHistory: React.FC = () => {
   const router = useRouter();
@@ -50,7 +52,10 @@ const OrderHistory: React.FC = () => {
                   Total: {order.totalAmount.toFixed(2)} บาท
                 </p>
                 <p className="text-gray-700 mb-4">
-                  Status: <span className="font-semibold">{order.status}</span>
+                  Status:{" "}
+                  <span className="font-semibold">
+                    {getOrderStatusText(order.status)}
+                  </span>
                 </p>
 
                 <div className="space-y-2">
@@ -80,7 +85,7 @@ const OrderHistory: React.FC = () => {
                       );
                     })}
                   </ul>
-                  {order.status === "SHIPPED" && (
+                  {order.status === OrderStatus.SHIPPED && (
                     <div className="relative mt-4">
                       <button
                         onClick={(e) => confirmDelivery(e, order.id)} // ส่งอีเวนต์และ orderId
