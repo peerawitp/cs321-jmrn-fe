@@ -1,7 +1,5 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { findProductById } from "@/data/products";
 import CartItemUpdater from "../components/CartItemUpdater"; // นำเข้าคอมโพเนนต์ที่สร้างใหม่
 import Image from "next/image"; // นำเข้า Image component
 import { useCartStore } from "@/stores/useCartStore";
@@ -14,6 +12,7 @@ const Cart: React.FC = () => {
     cartItems,
     increaseQuantity: storeIncreaseQuantity,
     decreaseQuantity: storeDecreaseQuantity,
+    removeItem: storeRemoveItem,
   } = useCartStore();
 
   const { data: products, isLoading } = useProduct();
@@ -23,21 +22,39 @@ const Cart: React.FC = () => {
     return cartItems.reduce((total, item) => {
       const product = products?.find((p) => p.id === item.productId);
       const sizeInfo = product?.productSizes.find(
-        (size) => size.id === item.productSizeId,
-      ); // ค้นหาขนาดสินค้า
-      return sizeInfo ? total + sizeInfo.price * item.quantity : total; // คำนวณราคาตามจำนวนสินค้า
+        (size) => size.id === item.productSizeId
+      );
+      return sizeInfo ? total + sizeInfo.price * item.quantity : total;
     }, 0);
   };
 
   // ฟังก์ชันสำหรับเพิ่มจำนวนสินค้าในตะกร้า
   const increaseQuantity = (productId: number, productSizeId: number) => {
-    // TODO: Check if the quantity is less than the available stock
-    storeIncreaseQuantity(productId, productSizeId);
+    // ตรวจสอบว่ามีสินค้าจำนวนมากพอหรือไม่
+    const product = products?.find((p) => p.id === productId);
+    const productSize = product?.productSizes.find(
+      (size) => size.id === productSizeId
+    );
+
+    const cartItem = cartItems.find(
+      (item) => item.productId === productId && item.productSizeId === productSizeId
+    );
+
+    if (productSize && cartItem && cartItem.quantity < productSize.quantity) {
+      storeIncreaseQuantity(productId, productSizeId);
+    } else {
+      alert("ไม่สามารถเพิ่มได้ เนื่องจากจำนวนคงเหลือไม่เพียงพอ");
+    }
   };
 
   // ฟังก์ชันสำหรับลดจำนวนสินค้าในตะกร้า
   const decreaseQuantity = (productId: number, productSizeId: number) => {
     storeDecreaseQuantity(productId, productSizeId);
+  };
+
+  // ฟังก์ชันสำหรับลบสินค้าออกจากตะกร้า
+  const removeItem = (productId: number, productSizeId: number) => {
+    storeRemoveItem(productId, productSizeId);
   };
 
   return (
@@ -53,11 +70,12 @@ const Cart: React.FC = () => {
             {/* แสดงรายการสินค้าในตะกร้า */}
             <div className="space-y-4">
               {cartItems.map((item) => {
-                const product = products?.find((p) => p.id === item.productId); // ค้นหาสินค้า
-                if (!product) return null; // ถ้าไม่เจอสินค้าก็ข้ามไป
+                const product = products?.find((p) => p.id === item.productId);
+                if (!product) return null;
+
                 const productSize = product.productSizes.find(
-                  (size) => size.id === item.productSizeId,
-                ); // ขนาดสินค้า
+                  (size) => size.id === item.productSizeId
+                );
 
                 return (
                   <div
@@ -67,18 +85,16 @@ const Cart: React.FC = () => {
                     {/* แสดงรูปภาพสินค้า */}
                     <div className="flex items-center space-x-4">
                       <Image
-                        src={product.imageUrl || "/images/no_image.jpg"} // ใช้รูปภาพของสินค้าจากข้อมูลสินค้า
+                        src={product.imageUrl || "/images/no_image.jpg"}
                         alt={product.name}
-                        width={100} // กำหนดขนาดความกว้างของรูปภาพ
-                        height={100} // กำหนดขนาดความสูงของรูปภาพ
+                        width={100}
+                        height={100}
                         className="rounded"
                       />
                       <div>
                         {/* แสดงชื่อสินค้าและขนาด */}
                         <h3 className="text-lg font-bold">{product.name}</h3>
-                        <p className="text-gray-600">
-                          Size: {productSize?.name}
-                        </p>
+                        <p className="text-gray-600">Size: {productSize?.name}</p>
                       </div>
                     </div>
 
@@ -89,7 +105,10 @@ const Cart: React.FC = () => {
                       quantity={item.quantity}
                       increaseQuantity={increaseQuantity}
                       decreaseQuantity={decreaseQuantity}
+                      removeItem={removeItem}
                     />
+
+                    <p>จำนวนคงเหลือ: {productSize?.quantity} ชิ้น</p>
 
                     {/* แสดงราคาสินค้าตามขนาด */}
                     <div className="text-right">

@@ -49,7 +49,7 @@ export default function ProductPage() {
     if (selectedSize && quantity < selectedSize.quantity) {
       setQuantity((prevQuantity) => prevQuantity + 1);
     } else {
-      alert("Cannot add more than available stock.");
+      alert("ไม่สามารถเพิ่มได้ เนื่องจากจำนวนคงเหลือไม่เพียงพอ");
     }
   };
 
@@ -116,30 +116,35 @@ export default function ProductPage() {
         {selectedSize && (
           <div className="mt-6 bg-gray-50 p-4 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold">Selected Size:</h3>
-            <p className="font-bold">Price: {selectedSize.price} บาท</p>
-            <p>Quantity Available: {selectedSize.quantity}</p>
+            <p className="font-medium">Price: {selectedSize.price} บาท</p>
             <p>Overall Diameter: {selectedSize.overallDiameter} mm</p>
             <p>Overall Width: {selectedSize.overallWidth} mm</p>
             <p>Measurement Rim: {selectedSize.measurementRim} inches</p>
             <p>Standard Rim: {selectedSize.standardRim} inches</p>
           </div>
-        )}
 
-        <div className="mt-6 flex items-center space-x-4">
-          <button
-            onClick={decreaseQuantity}
-            className="px-4 py-2 bg-gray-300 rounded-md text-gray-700 hover:bg-gray-400"
-          >
-            -
-          </button>
-          <span className="text-xl font-semibold">{quantity}</span>
-          <button
-            onClick={increaseQuantity}
-            className="px-4 py-2 bg-gray-300 rounded-md text-gray-700 hover:bg-gray-400"
-          >
-            +
-          </button>
-        </div>
+        )}
+        {selectedSize && (
+          <div className="mt-6 flex items-center space-x-4">
+            <button
+              onClick={decreaseQuantity}
+              className="px-4 py-2 bg-gray-300 rounded-md text-gray-700 hover:bg-gray-400"
+            >
+              -
+            </button>
+            <span className="text-xl font-semibold">{quantity}</span>
+            <button
+              onClick={increaseQuantity}
+              className="px-4 py-2 bg-gray-300 rounded-md text-gray-700 hover:bg-gray-400"
+            >
+              +
+            </button>
+            <p className="font-medium">จำนวนคงเหลือ: {selectedSize.quantity}</p>
+
+          </div>
+        )
+        }
+
         <div className="mt-6 flex justify-center items-center space-x-4">
           {session ? (
             <button
