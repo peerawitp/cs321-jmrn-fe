@@ -5,6 +5,7 @@ import { product } from "../../../public/data/data";
 import { Context } from "../TableContext";
 import UpdateForm from "./UpdateForm";
 import CreateForm from "./CreateForm";
+import SearchBar  from "../components/SearchBar"
 
 const Table = () => {
     const [showCreatePopUp, setShowCreatePopUp] = useState(false);
@@ -46,22 +47,28 @@ const Table = () => {
         <div className="flex">
             <div className="overflow-x-auto w-full bg-white text-black">
                 {/* button */}
-                <div className="mt-[50px] mb-[10px] flex justify-start">
+                <div className="gap-1 mt-[50px] mb-[10px] flex justify-start">
                     <button
-                        className="mx-3 btn bg-[#387ADF] hover:bg-[#2558a5] text-white"
+                        className=" btn bg-[#387ADF] hover:bg-[#2558a5] text-white"
                         onClick={handleCreateOpenPopUp}
                     >
                         Create
                     </button>
                     <button
-                        className="mr-3 btn btn-ghost bg-white"
+                        className=" btn btn-ghost bg-white"
                         onClick={handleUpdateOpenPopUp}
                     >
                         Update
                     </button>
-                    <button className="mr-3 btn bg-[#EC5A5A] hover:bg-[#ff4a4a] text-white">
+                    <button className=" btn bg-[#EC5A5A] hover:bg-[#ff4a4a] text-white">
                         Delete
                     </button>
+                </div>
+
+                {/* <input className="mr-3 my-[10px] p-[5px] border-2 w-60 border-cyan-900 rounded-md" placeholder="type to search..."/> */}
+
+                <div className="mb-4">
+                    <SearchBar/>
                 </div>
 
                 <table className="min-w-full table-auto justify-center text-center">
@@ -107,7 +114,7 @@ const Table = () => {
                 {showUpdatePopUp && (
                     <div className="fixed inset-0 flex justify-center items-start bg-black bg-opacity-50 z-50">
                         <div className="mt-20">
-                            <UpdateForm closePopUp={handleUpdateClosePopUp} />
+                            <UpdateForm closePopUp={handleUpdateClosePopUp} id={id} />
                         </div>
                     </div>
                 )}
