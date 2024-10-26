@@ -1,18 +1,19 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import useOrderHistory from "@/api/user/useOrderHistory";
 import useProduct from "@/api/user/useProduct";
 import useUserInfo from "@/api/user/useUserInfo";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { Order, OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
 
 import useConfirmReceive from "@/api/user/useConfirmReceive";
 import { useQueryClient } from "@tanstack/react-query";
 import useCancelOrder from "@/api/user/useCancelOrder";
+import useUploadSlip from "@/api/user/useUploadSlip";
 
 const OrderDetail: React.FC = () => {
   const { orderId } = useParams();
@@ -21,11 +22,14 @@ const OrderDetail: React.FC = () => {
   const { data: products } = useProduct();
   const { data: userInfo } = useUserInfo();
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [order, setOrder] = useState<Order | null>(null);
+  const [isUploading, setIsUploading] = useState(false); // State to track upload status
 
   const confirmReceiveMutation = useConfirmReceive();
   const cancelOrderMutation = useCancelOrder();
   const queryClient = useQueryClient();
+  const uploadSlipMutation = useUploadSlip();
 
   useEffect(() => {
     if (orderHistory && userInfo) {
@@ -35,6 +39,27 @@ const OrderDetail: React.FC = () => {
       setOrder(foundOrder || null);
     }
   }, [orderHistory, orderId, userInfo]);
+
+  const handleFileChange = async () => {
+    if (fileInputRef.current?.files?.length) {
+      const file = fileInputRef.current.files[0];
+      setIsUploading(true); // Set uploading state to true
+      await uploadSlipMutation.mutateAsync(
+        { orderId: order?.id!, slip: file },
+        {
+          onSuccess: () => {
+            alert("Slip uploaded successfully!");
+            queryClient.invalidateQueries({ queryKey: ["orderHistory"] });
+          },
+          onError: (error) => {
+            alert("An error occurred. " + error.message);
+          },
+        },
+      );
+
+      setIsUploading(false); // Set uploading state to false
+    }
+  };
 
   if (isLoading) {
     return <div className="min-h-screen p-8 text-center">Loading...</div>;
@@ -63,6 +88,10 @@ const OrderDetail: React.FC = () => {
     );
   };
 
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const cancelOrder = async () => {
     await cancelOrderMutation.mutateAsync(
       { orderId: order.id },
@@ -84,13 +113,32 @@ const OrderDetail: React.FC = () => {
         <h1 className="text-3xl font-bold mb-6 text-center">
           Order #{order.id}
         </h1>
+
+        {/* Loading Animation */}
+        {isUploading && (
+          <div className="text-center mt-4">
+            <p>Uploading slip...</p>
+            <div className="loader"></div>
+          </div>
+        )}
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
         {order.status === OrderStatus.WAITING_PAYMENT && (
-                  <div className="relative ">
-                    <button className="absolute top-2 right-2 rounded-md px-4 py-2   bg-blue-500 hover:bg-blue-600 text-white">
-                      <FontAwesomeIcon icon={faUpload} className="px-1" />
-                      แจ้งสลิป
-                    </button>
-                  </div>
+          <div className="relative">
+            <button
+              onClick={handleButtonClick}
+              className="absolute top-2 right-2 rounded-md px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              <FontAwesomeIcon icon={faUpload} className="px-1" />
+              แจ้งสลิป
+            </button>
+          </div>
         )}
         <p className="text-lg text-center mb-6">
           Here are the details of your order.
@@ -192,6 +240,28 @@ const OrderDetail: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* CSS for loader */}
+      <style jsx>{`
+        .loader {
+          border: 6px solid #f3f3f3; /* Light grey */
+          border-top: 6px solid #3498db; /* Blue */
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          animation: spin 1s linear infinite;
+          margin: 20px auto;
+        }
+
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </div>
   );
 };
