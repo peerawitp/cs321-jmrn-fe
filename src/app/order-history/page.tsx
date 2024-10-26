@@ -7,6 +7,8 @@ import { OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
 import useConfirmReceive from "@/api/user/useConfirmReceive";
 import { useQueryClient } from "@tanstack/react-query";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
 const OrderHistory: React.FC = () => {
   const router = useRouter();
@@ -55,6 +57,14 @@ const OrderHistory: React.FC = () => {
                 className="bg-gray-50 p-6 rounded shadow cursor-pointer hover:bg-gray-100 transition duration-200"
                 onClick={() => handleCardClick(order.id)} // เพิ่ม onClick เพื่อให้คลิกทั้ง card ได้
               >
+                {order.status === OrderStatus.WAITING_PAYMENT && (
+                  <div className="relative ">
+                    <button className="absolute top-2 right-2 rounded-md px-4 py-2   bg-blue-500 hover:bg-blue-600 text-white">
+                      <FontAwesomeIcon icon={faUpload} className="px-1" />
+                      แจ้งสลิป
+                    </button>
+                  </div>
+                )}
                 <h2 className="text-xl font-bold mb-2">Order #{order.id}</h2>
                 <p className="text-gray-700">
                   Date: {order.createdAt.toLocaleString()}
