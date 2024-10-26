@@ -7,6 +7,7 @@ import { OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
 import useConfirmReceive from "@/api/user/useConfirmReceive";
 import { useQueryClient } from "@tanstack/react-query";
+import useCancelOrder from "@/api/user/useCancelOrder";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
@@ -17,6 +18,7 @@ const OrderHistory: React.FC = () => {
   const { data: orderHistory, isLoading, error } = useOrderHistory();
 
   const confirmReceiveMutation = useConfirmReceive();
+  const cancelOrderMutation = useCancelOrder();
   const queryClient = useQueryClient();
 
   if (orderHistory) {
@@ -31,6 +33,23 @@ const OrderHistory: React.FC = () => {
       {
         onSuccess: () => {
           alert("Order status updated successfully!");
+          queryClient.invalidateQueries({ queryKey: ["orderHistory"] });
+        },
+        onError: (error) => {
+          alert("An error occurred. " + error.message);
+        },
+      },
+    );
+  };
+
+  const cancelOrder = async (e: React.MouseEvent, orderId: number) => {
+    e.stopPropagation();
+
+    await cancelOrderMutation.mutateAsync(
+      { orderId },
+      {
+        onSuccess: () => {
+          alert("Order has been cancelled!");
           queryClient.invalidateQueries({ queryKey: ["orderHistory"] });
         },
         onError: (error) => {
@@ -119,7 +138,7 @@ const OrderHistory: React.FC = () => {
                   {order.status === OrderStatus.WAITING_PAYMENT && (
                     <div className="relative mt-4">
                       <button
-                        onClick={(e) => confirmDelivery(e, order.id)} // ส่งอีเวนต์และ orderId
+                        onClick={(e) => cancelOrder(e, order.id)} // ส่งอีเวนต์และ orderId
                         className="absolute right-0 bottom-0 px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600"
                       >
                         Cancel Order

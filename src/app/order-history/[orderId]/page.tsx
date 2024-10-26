@@ -11,6 +11,7 @@ import { getOrderStatusText } from "@/lib/orderStatusText";
 
 import useConfirmReceive from "@/api/user/useConfirmReceive";
 import { useQueryClient } from "@tanstack/react-query";
+import useCancelOrder from "@/api/user/useCancelOrder";
 
 const OrderDetail: React.FC = () => {
   const { orderId } = useParams();
@@ -22,6 +23,7 @@ const OrderDetail: React.FC = () => {
   const [order, setOrder] = useState<Order | null>(null);
 
   const confirmReceiveMutation = useConfirmReceive();
+  const cancelOrderMutation = useCancelOrder();
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -51,6 +53,21 @@ const OrderDetail: React.FC = () => {
       {
         onSuccess: () => {
           alert("Order status updated successfully!");
+          queryClient.invalidateQueries({ queryKey: ["orderHistory"] });
+        },
+        onError: (error) => {
+          alert("An error occurred. " + error.message);
+        },
+      },
+    );
+  };
+
+  const cancelOrder = async () => {
+    await cancelOrderMutation.mutateAsync(
+      { orderId: order.id },
+      {
+        onSuccess: () => {
+          alert("Order has been cancelled!");
           queryClient.invalidateQueries({ queryKey: ["orderHistory"] });
         },
         onError: (error) => {
@@ -135,7 +152,7 @@ const OrderDetail: React.FC = () => {
           </p>
           <p>{shippingAddress?.country}</p>
         </div>
-              
+
         {order.status === OrderStatus.SHIPPED && (
           <div className="text-center mt-4">
             <button
@@ -149,14 +166,13 @@ const OrderDetail: React.FC = () => {
         {order.status === OrderStatus.WAITING_PAYMENT && (
           <div className="text-center mt-4">
             <button
-              onClick={confirmDelivery}
+              onClick={cancelOrder}
               className="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600"
             >
               Cancel Order
             </button>
           </div>
         )}
-        
 
         <div className="text-center mt-8">
           <button

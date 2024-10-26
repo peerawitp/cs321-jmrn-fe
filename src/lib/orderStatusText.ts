@@ -12,6 +12,8 @@ export const getOrderStatusText = (status: OrderStatus) => {
       return "จัดส่งสำเร็จ";
     case OrderStatus.SUCCESS:
       return "เสร็จสิ้น";
+    case OrderStatus.CANCELLED:
+      return "ยกเลิก";
     default:
       return "Unknown";
   }

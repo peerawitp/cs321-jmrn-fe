@@ -1,0 +1,3 @@
+interface CancelOrder {
+  orderId: number;
+}
