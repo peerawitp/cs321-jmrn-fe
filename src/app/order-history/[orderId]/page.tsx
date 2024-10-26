@@ -9,6 +9,9 @@ import useUserInfo from "@/api/user/useUserInfo";
 import { Order, OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
 
+import useConfirmReceive from "@/api/user/useConfirmReceive";
+import { useQueryClient } from "@tanstack/react-query";
+
 const OrderDetail: React.FC = () => {
   const { orderId } = useParams();
   const router = useRouter();
@@ -17,6 +20,9 @@ const OrderDetail: React.FC = () => {
   const { data: userInfo } = useUserInfo();
 
   const [order, setOrder] = useState<Order | null>(null);
+
+  const confirmReceiveMutation = useConfirmReceive();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (orderHistory && userInfo) {
@@ -39,8 +45,19 @@ const OrderDetail: React.FC = () => {
     (address) => address.id === order.addressId,
   );
 
-  const confirmDelivery = () => {
-    alert("Thank you for confirming the delivery!");
+  const confirmDelivery = async () => {
+    await confirmReceiveMutation.mutateAsync(
+      { orderId: order.id },
+      {
+        onSuccess: () => {
+          alert("Order status updated successfully!");
+          queryClient.invalidateQueries({ queryKey: ["orderHistory"] });
+        },
+        onError: (error) => {
+          alert("An error occurred. " + error.message);
+        },
+      },
+    );
   };
 
   return (

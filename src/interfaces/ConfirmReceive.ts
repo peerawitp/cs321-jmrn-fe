@@ -1,0 +1,3 @@
+interface ConfirmReceive {
+  orderId: number;
+}

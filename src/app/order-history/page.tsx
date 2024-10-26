@@ -5,6 +5,8 @@ import useOrderHistory from "@/api/user/useOrderHistory";
 import useProduct from "@/api/user/useProduct";
 import { OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
+import useConfirmReceive from "@/api/user/useConfirmReceive";
+import { useQueryClient } from "@tanstack/react-query";
 
 const OrderHistory: React.FC = () => {
   const router = useRouter();
@@ -12,19 +14,28 @@ const OrderHistory: React.FC = () => {
   const { data: products } = useProduct();
   const { data: orderHistory, isLoading, error } = useOrderHistory();
 
+  const confirmReceiveMutation = useConfirmReceive();
+  const queryClient = useQueryClient();
+
   if (orderHistory) {
     console.log(orderHistory);
   }
 
-  const confirmDelivery = (e: React.MouseEvent, orderId: number) => {
+  const confirmDelivery = async (e: React.MouseEvent, orderId: number) => {
     e.stopPropagation();
 
-    // อัปเดตสถานะคำสั่งซื้อใน orderHistory เป็น "Delivered"
-    // const updatedOrders = orderHistory?.map((order) =>
-    //   order.orderId === orderId ? { ...order, status: "Delivered" } : order,
-    // );
-    // setOrderHistory(updatedOrders);
-    alert("Thank you for confirming the delivery!");
+    await confirmReceiveMutation.mutateAsync(
+      { orderId },
+      {
+        onSuccess: () => {
+          alert("Order status updated successfully!");
+          queryClient.invalidateQueries({ queryKey: ["orderHistory"] });
+        },
+        onError: (error) => {
+          alert("An error occurred. " + error.message);
+        },
+      },
+    );
   };
 
   const handleCardClick = (orderId: number) => {
