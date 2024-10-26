@@ -4,6 +4,7 @@ export enum OrderStatus {
   PREPARING = "PREPARING",
   SHIPPED = "SHIPPED",
   SUCCESS = "SUCCESS",
+  CANCELLED = "CANCELLED",
 }
 
 export interface Order {
