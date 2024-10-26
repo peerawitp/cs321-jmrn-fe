@@ -5,7 +5,8 @@ import Image from "next/image";
 import useOrderHistory from "@/api/user/useOrderHistory";
 import useProduct from "@/api/user/useProduct";
 import useUserInfo from "@/api/user/useUserInfo";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { Order, OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
 
@@ -83,6 +84,14 @@ const OrderDetail: React.FC = () => {
         <h1 className="text-3xl font-bold mb-6 text-center">
           Order #{order.id}
         </h1>
+        {order.status === OrderStatus.WAITING_PAYMENT && (
+                  <div className="relative ">
+                    <button className="absolute top-2 right-2 rounded-md px-4 py-2   bg-blue-500 hover:bg-blue-600 text-white">
+                      <FontAwesomeIcon icon={faUpload} className="px-1" />
+                      แจ้งสลิป
+                    </button>
+                  </div>
+        )}
         <p className="text-lg text-center mb-6">
           Here are the details of your order.
         </p>
