@@ -6,6 +6,8 @@ export const getOrderStatusText = (status: OrderStatus) => {
       return "กำลังประมวลผล";
     case OrderStatus.WAITING_PAYMENT:
       return "รอการชำระเงิน";
+    case OrderStatus.WAITING_PAYMENT_CONFIRMATION:
+      return "รอการตรวจสอบการชำระเงิน";
     case OrderStatus.PREPARING:
       return "กำลังจัดเตรียมสินค้า";
     case OrderStatus.SHIPPED:
