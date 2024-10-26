@@ -106,6 +106,16 @@ const OrderHistory: React.FC = () => {
                       </button>
                     </div>
                   )}
+                  {order.status === OrderStatus.WAITING_PAYMENT && (
+                    <div className="relative mt-4">
+                      <button
+                        onClick={(e) => confirmDelivery(e, order.id)} // ส่งอีเวนต์และ orderId
+                        className="absolute right-0 bottom-0 px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600"
+                      >
+                        Cancel Order
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

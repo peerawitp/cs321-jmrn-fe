@@ -135,7 +135,7 @@ const OrderDetail: React.FC = () => {
           </p>
           <p>{shippingAddress?.country}</p>
         </div>
-
+              
         {order.status === OrderStatus.SHIPPED && (
           <div className="text-center mt-4">
             <button
@@ -146,6 +146,17 @@ const OrderDetail: React.FC = () => {
             </button>
           </div>
         )}
+        {order.status === OrderStatus.WAITING_PAYMENT && (
+          <div className="text-center mt-4">
+            <button
+              onClick={confirmDelivery}
+              className="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600"
+            >
+              Cancel Order
+            </button>
+          </div>
+        )}
+        
 
         <div className="text-center mt-8">
           <button
