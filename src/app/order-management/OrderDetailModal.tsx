@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { EmployeeOrder, OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
 import Image from "next/image";
+import useVerifySlip from "@/api/employee/useConfirmSlip";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface OrderDetailModalProps {
   order: EmployeeOrder | null;
@@ -16,6 +18,9 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
   onClose,
   onUpdateStatus,
 }) => {
+  const verifySlipMutation = useVerifySlip();
+  const queryClient = useQueryClient();
+
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | null>(
     order ? order.status : null,
   );
@@ -34,6 +39,22 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
     if (selectedStatus && selectedStatus !== order.status) {
       onUpdateStatus(order.id, selectedStatus);
     }
+    onClose();
+  };
+
+  const handleVerifySlip = async (status: boolean) => {
+    await verifySlipMutation.mutateAsync(
+      { orderId: order.id, status },
+      {
+        onSuccess: () => {
+          alert("Verify slip successfully!");
+          queryClient.invalidateQueries({ queryKey: ["getAllOrder"] });
+        },
+        onError: (error) => {
+          alert("An error occurred. " + error.message);
+        },
+      },
+    );
     onClose();
   };
 
@@ -122,13 +143,13 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           {order.status === OrderStatus.WAITING_PAYMENT_CONFIRMATION && (
             <>
               <button
-                onClick={() => onUpdateStatus(order.id, OrderStatus.CANCELLED)}
+                onClick={() => handleVerifySlip(false)}
                 className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
               >
                 Cancel Billing
               </button>
               <button
-                onClick={() => onUpdateStatus(order.id, OrderStatus.PREPARING)}
+                onClick={() => handleVerifySlip(true)}
                 className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
               >
                 Confirm Billing
