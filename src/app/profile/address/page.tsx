@@ -12,7 +12,7 @@ const MyAddress: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-lg">
-        <h1 className="text-3xl font-bold mb-6 text-center">My Address</h1>
+        <h1 className="text-3xl font-bold mb-6 border-b-2 py-2">My Address</h1>
 
         {userInfo && userInfo.addresses.length > 0 ? (
           <div className="space-y-6">

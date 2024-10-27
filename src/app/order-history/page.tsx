@@ -28,7 +28,7 @@ const OrderHistory: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-6">
       <div className="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold mb-8 text-center">Order History</h1>
+        <h1 className="text-3xl font-bold mb-8 py-2 border-b-2">Order History</h1>
 
         {/* Filter buttons */}
         <div className="flex flex-wrap justify-center gap-3 mb-8">

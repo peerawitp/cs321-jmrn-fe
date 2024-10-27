@@ -51,7 +51,7 @@ const AddAddress: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-lg">
-        <h1 className="text-3xl font-bold mb-6">Add New Address</h1>
+        <h1 className="text-3xl font-bold mb-6 border-b-2 py-2">Add New Address</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
