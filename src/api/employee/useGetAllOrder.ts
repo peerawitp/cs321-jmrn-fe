@@ -1,11 +1,11 @@
-import { MarketingOrder, Order } from "@/interfaces/Order";
+import { EmployeeOrder } from "@/interfaces/Order";
 import axiosInstance from "@/lib/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 import { getSession } from "next-auth/react";
 
 const getAllOrder = async () => {
   const session = await getSession();
-  const { data } = await axiosInstance.get<MarketingOrder[]>(
+  const { data } = await axiosInstance.get<EmployeeOrder[]>(
     "/order-management/get-all-order",
     {
       headers: {
@@ -18,7 +18,7 @@ const getAllOrder = async () => {
 };
 
 const useGetAllOrder = () => {
-  return useQuery<MarketingOrder[]>({
+  return useQuery<EmployeeOrder[]>({
     queryKey: ["getAllOrder"],
     queryFn: getAllOrder,
   });

@@ -23,7 +23,7 @@ export interface Order {
   updatedAt: Date;
 }
 
-export interface MarketingOrder extends Order {
+export interface EmployeeOrder extends Order {
   user: {
     id: string;
     phone: string;

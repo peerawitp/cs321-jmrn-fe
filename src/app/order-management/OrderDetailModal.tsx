@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { MarketingOrder, OrderStatus } from "@/interfaces/Order";
+import { EmployeeOrder, OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
 import Image from "next/image";
 
 interface OrderDetailModalProps {
-  order: MarketingOrder | null;
+  order: EmployeeOrder | null;
   onClose: () => void;
   onUpdateStatus: (orderId: number, newStatus: OrderStatus) => void;
 }
@@ -105,13 +105,12 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               width={1200}
               height={1200}
               onLoad={() => setIsImageLoaded(true)}
-              className={`transition-opacity duration-500 rounded-md ${isImageLoaded ? "opacity-100" : "opacity-0"
-                }`}
+              className={`transition-opacity duration-500 rounded-md ${
+                isImageLoaded ? "opacity-100" : "opacity-0"
+              }`}
             />
-
           </div>
         )}
-
 
         <div className="flex justify-end gap-2 mt-4">
           <button
@@ -145,7 +144,6 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               Confirm
             </button>
           )}
-          
         </div>
       </div>
     </div>

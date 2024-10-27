@@ -2,16 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import OrderDetailModal from "./OrderDetailModal";
-import useGetAllOrder from "@/api/marketing/useGetAllOrder";
-import { MarketingOrder, Order, OrderStatus } from "@/interfaces/Order";
+import useGetAllOrder from "@/api/employee/useGetAllOrder";
+import { EmployeeOrder, Order, OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
 import { signOut, useSession } from "next-auth/react";
 
 const OrderManagement = () => {
-  const [orders, setOrders] = useState<MarketingOrder[]>();
+  const [orders, setOrders] = useState<EmployeeOrder[]>();
   const [searchId, setSearchId] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "">("");
-  const [selectedOrder, setSelectedOrder] = useState<MarketingOrder | null>(
+  const [selectedOrder, setSelectedOrder] = useState<EmployeeOrder | null>(
     null,
   );
   const { data: session } = useSession();
@@ -36,7 +36,7 @@ const OrderManagement = () => {
     setSelectedStatus(status);
   };
 
-  const handleViewOrder = (order: MarketingOrder) => {
+  const handleViewOrder = (order: EmployeeOrder) => {
     setSelectedOrder(order);
   };
 
@@ -82,7 +82,7 @@ const OrderManagement = () => {
     );
   };
 
-  const renderOrders = (filteredOrders: MarketingOrder[]) => {
+  const renderOrders = (filteredOrders: EmployeeOrder[]) => {
     // Filter orders to only include those with the desired statuses for STORE role
     const allowedStatuses = [
       "PREPARING",
