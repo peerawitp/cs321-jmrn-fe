@@ -3,19 +3,19 @@ import { OrderStatus } from "@/interfaces/Order";
 export const getOrderStatusText = (status: OrderStatus) => {
   switch (status) {
     case OrderStatus.PROCESSING:
-      return "กำลังประมวลผล";
+      return "Processing";
     case OrderStatus.WAITING_PAYMENT:
-      return "รอการชำระเงิน";
+      return "Waiting for Payment";
     case OrderStatus.WAITING_PAYMENT_CONFIRMATION:
-      return "รอการตรวจสอบการชำระเงิน";
+      return "Waiting for Payment Confirmation";
     case OrderStatus.PREPARING:
-      return "กำลังจัดเตรียมสินค้า";
+      return "Preparing";
     case OrderStatus.SHIPPED:
-      return "อยู่ระหว่างการขนส่ง";
+      return "Shipped";
     case OrderStatus.SUCCESS:
-      return "จัดส่งสำเร็จ";
+      return "Succeeded";
     case OrderStatus.CANCELLED:
-      return "ยกเลิก";
+      return "Cancelled";
     default:
       return "Unknown";
   }
