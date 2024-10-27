@@ -7,10 +7,10 @@ import { useForm } from "react-hook-form";
 
 interface UpdateFormProps {
   closePopUp: () => void; // Function with no arguments, returning nothing
-  id: string;
+  id: number;
 }
 
-const findProductByID = (id: string) => {
+const findProductByID = (id: number) => {
   return product.find((product) => product.id === id);
 };
 

@@ -7,6 +7,7 @@ import Image from "next/image";
 
 const OrderDetail: React.FC = () => {
   const { orderId } = useParams();
+  console.log(orderId)
   const router = useRouter();
 
   // ค้นหาคำสั่งซื้อที่ตรงกับ orderId

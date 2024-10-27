@@ -2,8 +2,8 @@
 import {createContext, ReactNode, useState} from 'react'
 
 interface IdContext {
-    id : string | null;
-    setID : (id : string) => void
+    id : number | null;
+    setID : (id : number) => void
 }
 
 export const Context = createContext<IdContext>({
@@ -12,7 +12,7 @@ export const Context = createContext<IdContext>({
 })
 
 const TableContext = ({children}:{children: ReactNode}) => {
-    const [id, setID] = useState<string|null>(null);
+    const [id, setID] = useState<number|null>(null);
 
     
   return (
