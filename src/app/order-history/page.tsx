@@ -5,17 +5,12 @@ import useOrderHistory from "@/api/user/useOrderHistory";
 import useProduct from "@/api/user/useProduct";
 import { OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
-import { useQueryClient } from "@tanstack/react-query";
-import useCancelOrder from "@/api/user/useCancelOrder";
 
 const OrderHistory: React.FC = () => {
   const router = useRouter();
 
   const { data: products } = useProduct();
   const { data: orderHistory } = useOrderHistory();
-  const cancelOrderMutation = useCancelOrder();
-
-  const queryClient = useQueryClient();
 
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "ALL">(
     "ALL",

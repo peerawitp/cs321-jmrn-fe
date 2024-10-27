@@ -14,6 +14,8 @@ export interface Order {
   addressId: number;
   status: OrderStatus;
   totalAmount: number;
+  slipImageUrl: string | null;
+  paymentVerifiedByUserID: string | null;
   orderItems: OrderItem[];
   createdAt: Date;
   updatedAt: Date;
