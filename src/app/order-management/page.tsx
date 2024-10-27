@@ -30,8 +30,8 @@ const OrderManagement = () => {
   const handleUpdateStatus = (orderId: number, newStatus: OrderStatus) => {
     setOrders((prevOrders) =>
       prevOrders.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
+        order.id === orderId ? { ...order, status: newStatus } : order,
+      ),
     );
 
     if (selectedOrder && selectedOrder.id === orderId) {
@@ -53,10 +53,14 @@ const OrderManagement = () => {
     }
 
     if (selectedStatus) {
-      filteredOrders = filteredOrders.filter((order) => order.status === selectedStatus);
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status === selectedStatus,
+      );
     }
 
-    return filteredOrders.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    return filteredOrders.sort(
+      (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+    );
   };
 
   const renderOrders = (filteredOrders: Order[]) => {
@@ -68,7 +72,9 @@ const OrderManagement = () => {
         >
           {/* Left Side: Order ID and View Button */}
           <div className="w-1/4">
-            <span className="block text-sm font-bold">Order ID: {order.id}</span>
+            <span className="block text-sm font-bold">
+              Order ID: {order.id}
+            </span>
             <button
               onClick={() => handleViewOrder(order)}
               className="mt-2 text-blue-500 text-sm"
@@ -79,13 +85,17 @@ const OrderManagement = () => {
 
           {/* Middle: Customer Name and Address */}
           <div className="flex flex-col items-center justify-center w-2/4 text-center">
-            <span className="block text-sm font-bold">{order.customerName}</span>
+            <span className="block text-sm font-bold">
+              {order.customerName}
+            </span>
             <span className="block text-xs text-gray-500">{order.address}</span>
           </div>
 
           {/* Right Side: Order Status */}
           <div className="w-1/4 flex flex-col items-end">
-            <span className={`block text-sm font-bold ${getStatusColor(order.status)}`}>
+            <span
+              className={`block text-sm font-bold ${getStatusColor(order.status)}`}
+            >
               {order.status}
             </span>
           </div>
@@ -126,13 +136,15 @@ const OrderManagement = () => {
           placeholder="Search by Order ID"
           className="border rounded p-2 w-full mb-4"
         />
-        
+
         {/* Status Filter Buttons */}
         <div className="flex items-center flex-wrap gap-2 mb-4">
           <button
             onClick={() => handleStatusFilter("")}
             className={`px-4 py-2 rounded ${
-              selectedStatus === "" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
+              selectedStatus === ""
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
           >
             All Statuses
@@ -142,7 +154,9 @@ const OrderManagement = () => {
               key={status}
               onClick={() => handleStatusFilter(status)}
               className={`px-4 py-2 rounded ${
-                selectedStatus === status ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
+                selectedStatus === status
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-700"
               }`}
             >
               {status}
