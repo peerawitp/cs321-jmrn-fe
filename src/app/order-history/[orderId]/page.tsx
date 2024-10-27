@@ -120,7 +120,7 @@ const OrderDetail: React.FC = () => {
             <div className="loader"></div>
           </div>
         )}
-        
+
         <input
           ref={fileInputRef}
           type="file"
@@ -128,7 +128,7 @@ const OrderDetail: React.FC = () => {
           style={{ display: "none" }}
           onChange={handleFileChange}
         />
-        
+
         {order.status === OrderStatus.WAITING_PAYMENT && (
           <div className="relative">
             <button
@@ -136,7 +136,7 @@ const OrderDetail: React.FC = () => {
               className="absolute top-2 right-2 rounded-md px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white"
             >
               <FontAwesomeIcon icon={faUpload} className="px-1" />
-              แจ้งสลิป
+              Upload Payment Slip
             </button>
           </div>
         )}
@@ -158,7 +158,7 @@ const OrderDetail: React.FC = () => {
           </p>
           <p>{shippingAddress?.country}</p>
         </div>
-        
+
         <div className="bg-gray-50 p-6 rounded mb-6 shadow-md">
           <h2 className="text-xl font-bold mb-4">Order Details</h2>
           <p className="text-gray-700">
@@ -209,8 +209,6 @@ const OrderDetail: React.FC = () => {
             </ul>
           </div>
         </div>
-
-        
 
         {order.status === OrderStatus.SHIPPED && (
           <div className="text-center mt-4">
