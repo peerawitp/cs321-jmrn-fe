@@ -5,6 +5,7 @@ import OrderDetailModal from "./OrderDetailModal";
 import useGetAllOrder from "@/api/marketing/useGetAllOrder";
 import { MarketingOrder, Order, OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
+import { signOut, useSession } from "next-auth/react";
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState<MarketingOrder[]>();
@@ -13,6 +14,8 @@ const OrderManagement = () => {
   const [selectedOrder, setSelectedOrder] = useState<MarketingOrder | null>(
     null,
   );
+  const { data: session } = useSession();
+
 
   const { data: allOrders, isLoading } = useGetAllOrder();
 
@@ -81,8 +84,14 @@ const OrderManagement = () => {
   };
 
   const renderOrders = (filteredOrders: MarketingOrder[]) => {
-    return filteredOrders.length > 0 ? (
-      filteredOrders.map((order) => (
+    // Filter orders to only include those with the desired statuses for STORE role
+    const allowedStatuses = ["Preparing", "Shipped", "Succeeded"];
+    const filteredForStore = session?.user?.role === "STORE"
+      ? filteredOrders.filter((order) => allowedStatuses.includes(order.status))
+      : filteredOrders;
+
+    return filteredForStore.length > 0 ? (
+      filteredForStore.map((order) => (
         <div
           key={order.id}
           className="flex justify-between items-center p-4 bg-white rounded shadow mb-2"
@@ -133,6 +142,7 @@ const OrderManagement = () => {
     );
   };
 
+
   const getStatusColor = (status: OrderStatus) => {
     switch (status) {
       case OrderStatus.WAITING_PAYMENT:
@@ -170,27 +180,34 @@ const OrderManagement = () => {
         <div className="flex items-center flex-wrap gap-2 mb-4">
           <button
             onClick={() => handleStatusFilter("")}
-            className={`px-4 py-2 rounded ${
-              selectedStatus === ""
+            className={`px-4 py-2 rounded ${selectedStatus === ""
                 ? "bg-blue-500 text-white"
                 : "bg-gray-200 text-gray-700"
-            }`}
+              }`}
           >
             All
           </button>
-          {Object.values(OrderStatus).map((status) => (
-            <button
-              key={status}
-              onClick={() => handleStatusFilter(status)}
-              className={`px-4 py-2 rounded ${
-                selectedStatus === status
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              {getOrderStatusText(status)}
-            </button>
-          ))}
+          {Object.values(OrderStatus)
+            .filter((status) => {
+              // Only allow STORE role to see PREPARING, SHIPPED, and SUCCEEDED statuses
+              if (session?.user?.role === "STORE") {
+                return ["PREPARING", "SHIPPED", "SUCCESS"].includes(status);
+              }
+              return true; // Allow all statuses for other roles
+            })
+            .map((status) => (
+              <button
+                key={status}
+                onClick={() => handleStatusFilter(status)}
+                className={`px-4 py-2 rounded ${selectedStatus === status
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-700"
+                  }`}
+              >
+                {getOrderStatusText(status)}
+              </button>
+            ))}
+
         </div>
 
         {renderOrders(getFilteredOrders())}
