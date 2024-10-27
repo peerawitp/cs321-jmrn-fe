@@ -1,3 +1,5 @@
+import Address from "./Address";
+
 export enum OrderStatus {
   PROCESSING = "PROCESSING",
   WAITING_PAYMENT = "WAITING_PAYMENT",
@@ -17,8 +19,19 @@ export interface Order {
   slipImageUrl: string | null;
   paymentVerifiedByUserID: string | null;
   orderItems: OrderItem[];
+  customerAddress: Address;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface MarketingOrder extends Order {
+  user: {
+    id: string;
+    phone: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
 }
 
 interface OrderItem {

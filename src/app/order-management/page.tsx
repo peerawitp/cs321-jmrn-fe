@@ -1,15 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
-import { Order, OrderStatus } from "./types";
-import { orders as initialOrders } from "./orders";
+import React, { useEffect, useState } from "react";
 import OrderDetailModal from "./OrderDetailModal";
+import useGetAllOrder from "@/api/marketing/useGetAllOrder";
+import { MarketingOrder, Order, OrderStatus } from "@/interfaces/Order";
+import { getOrderStatusText } from "@/lib/orderStatusText";
 
 const OrderManagement = () => {
-  const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const [orders, setOrders] = useState<MarketingOrder[]>();
   const [searchId, setSearchId] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "">("");
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<MarketingOrder | null>(
+    null,
+  );
+
+  const { data: allOrders, isLoading } = useGetAllOrder();
+
+  if (allOrders) {
+    console.log(allOrders);
+  }
+
+  useEffect(() => {
+    if (allOrders) {
+      setOrders(allOrders);
+    }
+  }, [allOrders]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchId(e.target.value);
@@ -19,7 +34,7 @@ const OrderManagement = () => {
     setSelectedStatus(status);
   };
 
-  const handleViewOrder = (order: Order) => {
+  const handleViewOrder = (order: MarketingOrder) => {
     setSelectedOrder(order);
   };
 
@@ -29,7 +44,7 @@ const OrderManagement = () => {
 
   const handleUpdateStatus = (orderId: number, newStatus: OrderStatus) => {
     setOrders((prevOrders) =>
-      prevOrders.map((order) =>
+      prevOrders?.map((order) =>
         order.id === orderId ? { ...order, status: newStatus } : order,
       ),
     );
@@ -40,6 +55,7 @@ const OrderManagement = () => {
   };
 
   const getFilteredOrders = () => {
+    if (!orders) return [];
     const trimmedSearchId = searchId.trim();
     let filteredOrders = [...orders];
 
@@ -59,11 +75,12 @@ const OrderManagement = () => {
     }
 
     return filteredOrders.sort(
-      (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
   };
 
-  const renderOrders = (filteredOrders: Order[]) => {
+  const renderOrders = (filteredOrders: MarketingOrder[]) => {
     return filteredOrders.length > 0 ? (
       filteredOrders.map((order) => (
         <div
@@ -86,9 +103,19 @@ const OrderManagement = () => {
           {/* Middle: Customer Name and Address */}
           <div className="flex flex-col items-center justify-center w-2/4 text-center">
             <span className="block text-sm font-bold">
-              {order.customerName}
+              {order.user.firstName} {order.user.lastName}
             </span>
-            <span className="block text-xs text-gray-500">{order.address}</span>
+            <span className="block text-xs text-gray-500">
+              {order.customerAddress.houseNumber},{" "}
+              {order.customerAddress.village}, {order.customerAddress.street},{" "}
+              {order.customerAddress.alley
+                ? `Alley: ${order.customerAddress.alley}, `
+                : ""}
+              {order.customerAddress.subDistrict},{" "}
+              {order.customerAddress.district}, {order.customerAddress.province}
+              , Postal Code: {order.customerAddress.postalCode}, Country:{" "}
+              {order.customerAddress.country}
+            </span>
           </div>
 
           {/* Right Side: Order Status */}
@@ -96,7 +123,7 @@ const OrderManagement = () => {
             <span
               className={`block text-sm font-bold ${getStatusColor(order.status)}`}
             >
-              {order.status}
+              {getOrderStatusText(order.status)}
             </span>
           </div>
         </div>
@@ -108,13 +135,15 @@ const OrderManagement = () => {
 
   const getStatusColor = (status: OrderStatus) => {
     switch (status) {
-      case OrderStatus.PAYMENT_PENDING:
+      case OrderStatus.WAITING_PAYMENT:
         return "text-yellow-500";
+      case OrderStatus.WAITING_PAYMENT_CONFIRMATION:
+        return "text-yellow-800";
       case OrderStatus.PREPARING:
         return "text-blue-500";
       case OrderStatus.SHIPPED:
         return "text-indigo-500";
-      case OrderStatus.DELIVERED:
+      case OrderStatus.SUCCESS:
         return "text-green-500";
       case OrderStatus.CANCELLED:
         return "text-red-500";
@@ -147,7 +176,7 @@ const OrderManagement = () => {
                 : "bg-gray-200 text-gray-700"
             }`}
           >
-            All Statuses
+            ทั้งหมด
           </button>
           {Object.values(OrderStatus).map((status) => (
             <button
@@ -159,7 +188,7 @@ const OrderManagement = () => {
                   : "bg-gray-200 text-gray-700"
               }`}
             >
-              {status}
+              {getOrderStatusText(status)}
             </button>
           ))}
         </div>

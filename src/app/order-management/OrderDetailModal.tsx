@@ -1,17 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { Order, OrderStatus } from "./types";
+import { MarketingOrder, OrderStatus } from "@/interfaces/Order";
 
 interface OrderDetailModalProps {
-  order: Order | null;
+  order: MarketingOrder | null;
   onClose: () => void;
   onUpdateStatus: (orderId: number, newStatus: OrderStatus) => void;
 }
 
-const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, onClose, onUpdateStatus }) => {
+const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
+  order,
+  onClose,
+  onUpdateStatus,
+}) => {
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | null>(
-    order ? order.status : null
+    order ? order.status : null,
   );
 
   if (!order) {
@@ -33,11 +37,28 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, onClose, onU
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded shadow-lg w-1/3">
         <h2 className="text-xl font-bold mb-4">Order Details</h2>
-        <p className="mb-2"><strong>Order ID:</strong> {order.id}</p>
-        <p className="mb-2"><strong>Customer Name:</strong> {order.customerName}</p>
-        <p className="mb-2"><strong>Address:</strong> {order.address}</p>
-        <p className="mb-2"><strong>Status:</strong></p>
-        
+        <p className="mb-2">
+          <strong>Order ID:</strong> {order.id}
+        </p>
+        <p className="mb-2">
+          <strong>Customer Name:</strong> {order.user.firstName}{" "}
+          {order.user.lastName}
+        </p>
+        <p className="mb-2">
+          <strong>Address:</strong> {order.customerAddress.houseNumber},{" "}
+          {order.customerAddress.village}, {order.customerAddress.street},{" "}
+          {order.customerAddress.alley
+            ? `Alley: ${order.customerAddress.alley}, `
+            : ""}
+          {order.customerAddress.subDistrict}, {order.customerAddress.district},{" "}
+          {order.customerAddress.province}, Postal Code:{" "}
+          {order.customerAddress.postalCode}, Country:{" "}
+          {order.customerAddress.country}
+        </p>
+        <p className="mb-2">
+          <strong>Status:</strong>
+        </p>
+
         {/* Status Dropdown */}
         <select
           value={selectedStatus || order.status}
@@ -51,7 +72,9 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, onClose, onU
           ))}
         </select>
 
-        <p className="mb-2"><strong>Created At:</strong> {order.createdAt.toLocaleString()}</p>
+        <p className="mb-2">
+          <strong>Created At:</strong> {order.createdAt.toLocaleString()}
+        </p>
 
         {/* Buttons */}
         <div className="flex justify-end gap-2 mt-4">
