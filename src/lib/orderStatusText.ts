@@ -11,9 +11,9 @@ export const getOrderStatusText = (status: OrderStatus) => {
     case OrderStatus.PREPARING:
       return "กำลังจัดเตรียมสินค้า";
     case OrderStatus.SHIPPED:
-      return "จัดส่งสำเร็จ";
+      return "อยู่ระหว่างการขนส่ง";
     case OrderStatus.SUCCESS:
-      return "เสร็จสิ้น";
+      return "จัดส่งสำเร็จ";
     case OrderStatus.CANCELLED:
       return "ยกเลิก";
     default:
