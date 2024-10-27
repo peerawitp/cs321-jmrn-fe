@@ -72,7 +72,7 @@ const OrderHistory: React.FC = () => {
                   Date: {order.createdAt.toLocaleString()}
                 </p>
                 <p className="text-sm text-gray-600 mb-1">
-                  Total: {order.totalAmount.toFixed(2)} บาท
+                  Total: {order.totalAmount.toFixed(2)} THB
                 </p>
                 <p className="text-sm text-gray-600 mb-3">
                   Status:{" "}
@@ -103,7 +103,7 @@ const OrderHistory: React.FC = () => {
                       return (
                         <li key={index} className="text-sm text-gray-700">
                           {product.name} ({productSize.name}) - Quantity:{" "}
-                          {item.quantity} - Price: {productSize.price} บาท
+                          {item.quantity} - Price: {productSize.price} THB
                         </li>
                       );
                     })}

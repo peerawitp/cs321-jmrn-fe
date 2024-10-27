@@ -7,7 +7,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg">
+    <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg border-2 border-gray-200">
       <img
         src={product.imageUrl || "/images/default.jpg"}
         alt={product.name}

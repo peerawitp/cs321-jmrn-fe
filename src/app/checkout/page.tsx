@@ -168,7 +168,7 @@ const CheckoutPage: React.FC = () => {
                           Tire Size: {productSize?.name}
                         </p>
                         <p className="text-gray-600">
-                          Price: {productSize?.price.toFixed(2)} บาท
+                          Price: {productSize?.price.toFixed(2)} THB
                         </p>
                       </div>
                     </div>
@@ -181,7 +181,7 @@ const CheckoutPage: React.FC = () => {
                     {/* ราคารวมต่อสินค้า */}
                     <div className="text-gray-700 font-semibold">
                       Total: {(productSize?.price! * item.quantity).toFixed(2)}{" "}
-                      บาท
+                      THB
                     </div>
                   </div>
                 );
@@ -191,7 +191,7 @@ const CheckoutPage: React.FC = () => {
             {/* ราคารวมทั้งหมด */}
             <div className="mt-6 text-right">
               <p className="text-xl font-semibold">
-                Total: {calculateTotalPrice().toFixed(2)} บาท
+                Total: {calculateTotalPrice().toFixed(2)} THB
               </p>
               <button
                 className="mt-4 px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"

@@ -17,10 +17,10 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({
         <button
           key={category.value || null}
           onClick={() => setSelectedCategory(category.value)}
-          className={`px-4 py-2 rounded-md bg-gray-500 ${
+          className={`px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 ${
             selectedCategory === category.value
-              ? `ring-2 ring-black ring-offset-2 bg-gray-700`
-              : "bg-gray-500"
+              ? `ring-2 ring-blue ring-offset-2 bg-blue-600`
+              : "bg-blue-500"
           }`}
         >
           {category.label}

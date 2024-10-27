@@ -113,7 +113,6 @@ const OrderDetail: React.FC = () => {
         <h1 className="text-3xl font-bold mb-6 text-center">
           Order #{order.id}
         </h1>
-
         {/* Loading Animation */}
         {isUploading && (
           <div className="text-center mt-4">
@@ -121,7 +120,7 @@ const OrderDetail: React.FC = () => {
             <div className="loader"></div>
           </div>
         )}
-
+        
         <input
           ref={fileInputRef}
           type="file"
@@ -129,6 +128,7 @@ const OrderDetail: React.FC = () => {
           style={{ display: "none" }}
           onChange={handleFileChange}
         />
+        
         {order.status === OrderStatus.WAITING_PAYMENT && (
           <div className="relative">
             <button
@@ -143,14 +143,29 @@ const OrderDetail: React.FC = () => {
         <p className="text-lg text-center mb-6">
           Here are the details of your order.
         </p>
-
+        <div className="bg-gray-50 p-6 rounded mb-6 shadow-md">
+          <h3 className="text-lg font-semibold mb-2">Shipping Information</h3>
+          <p>
+            {userInfo?.firstName} {userInfo?.lastName}
+          </p>
+          <p>
+            {shippingAddress?.houseNumber} {shippingAddress?.village}{" "}
+            {shippingAddress?.alley ? `Alley ${shippingAddress?.alley}` : ""}{" "}
+          </p>
+          <p>
+            {shippingAddress?.subDistrict} {shippingAddress?.district}{" "}
+            {shippingAddress?.postalCode}
+          </p>
+          <p>{shippingAddress?.country}</p>
+        </div>
+        
         <div className="bg-gray-50 p-6 rounded mb-6 shadow-md">
           <h2 className="text-xl font-bold mb-4">Order Details</h2>
           <p className="text-gray-700">
             Order Date: {order.createdAt.toLocaleString()}
           </p>
           <p className="text-gray-700 mb-4">
-            Total: {order.totalAmount.toFixed(2)} บาท
+            Total: {order.totalAmount.toFixed(2)} THB
           </p>
           <p className="text-gray-700 mb-4">
             Status:{" "}
@@ -179,13 +194,14 @@ const OrderDetail: React.FC = () => {
                       />
                       <div>
                         <p className="text-lg font-semibold">{product?.name}</p>
+                        <p>{productSize?.name}</p>
                         <p className="text-gray-600">
                           Quantity: {item.quantity}
                         </p>
                       </div>
                     </div>
                     <p className="text-lg font-semibold">
-                      {(productSize?.price! * item.quantity).toFixed(2)} บาท
+                      {(productSize?.price! * item.quantity).toFixed(2)} THB
                     </p>
                   </li>
                 );
@@ -194,21 +210,7 @@ const OrderDetail: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-gray-50 p-6 rounded mb-6 shadow-md">
-          <h3 className="text-lg font-semibold mb-2">Shipping Information</h3>
-          <p>
-            {userInfo?.firstName} {userInfo?.lastName}
-          </p>
-          <p>
-            {shippingAddress?.houseNumber} {shippingAddress?.village}{" "}
-            {shippingAddress?.alley ? `Alley ${shippingAddress?.alley}` : ""}{" "}
-          </p>
-          <p>
-            {shippingAddress?.subDistrict} {shippingAddress?.district}{" "}
-            {shippingAddress?.postalCode}
-          </p>
-          <p>{shippingAddress?.country}</p>
-        </div>
+        
 
         {order.status === OrderStatus.SHIPPED && (
           <div className="text-center mt-4">

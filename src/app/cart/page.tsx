@@ -43,7 +43,7 @@ const Cart: React.FC = () => {
     if (productSize && cartItem && cartItem.quantity < productSize.quantity) {
       storeIncreaseQuantity(productId, productSizeId);
     } else {
-      alert("ไม่สามารถเพิ่มได้ เนื่องจากจำนวนคงเหลือไม่เพียงพอ");
+      alert("Unable to add due to insufficient remaining quantity.");
     }
   };
 
@@ -77,12 +77,20 @@ const Cart: React.FC = () => {
                   (size) => size.id === item.productSizeId
                 );
 
+                // ตรวจสอบว่าจำนวนสินค้าในตะกร้ามากกว่าจำนวนคงเหลือหรือไม่
+                const maxQuantity = productSize ? productSize.quantity : 0;
+                const cartQuantity = item.quantity > maxQuantity ? maxQuantity : item.quantity;
+
+                // หากจำนวนสินค้าในตะกร้ามากกว่าจำนวนคงเหลือ ให้ปรับจำนวน
+                if (item.quantity > maxQuantity) {
+                  storeDecreaseQuantity(item.productId, item.productSizeId);
+                }
+
                 return (
                   <div
                     key={`${item.productId}-${productSize?.name}`}
                     className="flex items-center justify-between p-4 bg-gray-50 rounded shadow"
                   >
-                    {/* แสดงรูปภาพสินค้า */}
                     <div className="flex items-center space-x-4">
                       <Image
                         src={product.imageUrl || "/images/no_image.jpg"}
@@ -92,41 +100,39 @@ const Cart: React.FC = () => {
                         className="rounded"
                       />
                       <div>
-                        {/* แสดงชื่อสินค้าและขนาด */}
                         <h3 className="text-lg font-bold">{product.name}</h3>
                         <p className="text-gray-600">Size: {productSize?.name}</p>
                       </div>
                     </div>
 
-                    {/* ใช้งานคอมโพเนนต์ CartItemUpdater */}
                     <CartItemUpdater
                       productId={item.productId}
                       productSizeId={item.productSizeId}
-                      quantity={item.quantity}
+                      quantity={cartQuantity} // ใช้ค่า cartQuantity แทน item.quantity
                       increaseQuantity={increaseQuantity}
                       decreaseQuantity={decreaseQuantity}
                       removeItem={removeItem}
                     />
 
-                    <p>จำนวนคงเหลือ: {productSize?.quantity} ชิ้น</p>
+                    <p>Remaining: {productSize?.quantity} </p>
 
-                    {/* แสดงราคาสินค้าตามขนาด */}
                     <div className="text-right">
                       {productSize && (
                         <p className="text-gray-600">
-                          Price: {productSize.price.toFixed(2)} บาท
+                          Price: {productSize.price.toFixed(2)} THB
                         </p>
                       )}
                     </div>
                   </div>
                 );
               })}
+
             </div>
 
             {/* ราคารวมทั้งหมด */}
             <div className="mt-6 text-right">
               <p className="text-xl font-semibold">
-                Total: {calculateTotalPrice().toFixed(2)} บาท
+                Total: {calculateTotalPrice().toFixed(2)} THB
               </p>
               <button
                 onClick={() => router.push("/checkout")}

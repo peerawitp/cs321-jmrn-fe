@@ -243,13 +243,22 @@ const AddAddress: React.FC = () => {
               )}
             </div>
           </div>
+          <div className="flex gap-5 justify-end">
+            <button
+              className="mt-4 w-full md:w-auto px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600"
+              onClick={() => router.push("/profile/address")}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="mt-4 w-full md:w-auto px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600"
+            >
+              Add Address
+            </button>
 
-          <button
-            type="submit"
-            className="mt-4 w-full md:w-auto px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600"
-          >
-            Add Address
-          </button>
+          </div>
+
         </form>
       </div>
     </div>
