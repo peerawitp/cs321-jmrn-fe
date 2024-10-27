@@ -146,13 +146,15 @@ export default function ProductPage() {
         }
 
         <div className="mt-6 flex justify-center items-center space-x-4">
-          {session ? (
-            <button
-              onClick={handleAddToCart}
-              className="mt-6 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex justify-center items-center text-center"
-            >
-              Add to Cart
-            </button>
+          {session?.user?.email ? (
+            session.user.role === "CUSTOMER" ? (
+              <button
+                onClick={handleAddToCart}
+                className="mt-6 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex justify-center items-center text-center"
+              >
+                Add to Cart
+              </button>
+            ) : null // Hides button for MARKETING and STORE roles
           ) : (
             <Link
               href="/auth"
@@ -161,6 +163,7 @@ export default function ProductPage() {
               Login to Add to Cart
             </Link>
           )}
+
         </div>
       </div>
     )

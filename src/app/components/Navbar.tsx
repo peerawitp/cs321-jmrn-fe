@@ -109,30 +109,57 @@ const Navbar = () => {
               Products
             </Link>
             {session?.user?.email ? (
-              <>
-                <Link href="/cart" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">
-                  Cart
-                  {cartStore.cartItems.length > 0 && (
-                    <span className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">
-                      {cartStore.cartItems.length}
-                    </span>
-                  )}
-                </Link>
-                <Link href="/profile" className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-sm font-medium">
-                  Profile
-                </Link>
-                <p className="text-blue-500 block rounded-md text-sm font-bold">
-                  Hi, {session.user.firstName} {session.user.lastName}
-                </p>
-                <button onClick={handleLogout} className="text-red-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-bold">
-                  Logout
-                </button>
-              </>
+              session.user.role === "CUSTOMER" ? (
+                <>
+                  <Link href="/cart" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">
+                    Cart
+                    {cartStore.cartItems.length > 0 && (
+                      <span className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">
+                        {cartStore.cartItems.length}
+                      </span>
+                    )}
+                  </Link>
+                  <Link href="/profile" className="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-sm font-medium">
+                    Profile
+                  </Link>
+                  <p className="text-blue-500 block rounded-md text-sm font-bold">
+                    Hi, {session.user.firstName} {session.user.lastName}
+                  </p>
+                  <button onClick={handleLogout} className="text-red-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-bold">
+                    Logout
+                  </button>
+                </>
+              ) : session.user.role === "MARKETING" ? (
+                <>
+                  <Link href="/order-management" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">
+                    Order Management
+                  </Link>
+                  <p className="text-blue-500 block rounded-md text-sm font-bold">
+                    Hi, {session.user.firstName} {session.user.lastName}
+                  </p>
+                  <button onClick={handleLogout} className="text-red-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-bold">
+                    Logout
+                  </button>
+                </>
+              ) : session.user.role === "STORE" ? (
+                <>
+                  <Link href="/stock-management" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">
+                    Stock Management
+                  </Link>
+                  <p className="text-blue-500 block rounded-md text-sm font-bold">
+                    Hi, {session.user.firstName} {session.user.lastName}
+                  </p>
+                  <button onClick={handleLogout} className="text-red-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-bold">
+                    Logout
+                  </button>
+                </>
+              ) : null
             ) : (
               <Link href="/auth" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-bold">
                 Login | Register
               </Link>
             )}
+
           </div>
 
           {/* Mobile Menu Button */}
