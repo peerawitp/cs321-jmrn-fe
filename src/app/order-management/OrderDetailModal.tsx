@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { MarketingOrder, OrderStatus } from "@/interfaces/Order";
+import { getOrderStatusText } from "@/lib/orderStatusText";
+import Image from "next/image";
 
 interface OrderDetailModalProps {
   order: MarketingOrder | null;
@@ -17,6 +19,8 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | null>(
     order ? order.status : null,
   );
+
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   if (!order) {
     return null;
@@ -45,6 +49,12 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           {order.user.lastName}
         </p>
         <p className="mb-2">
+          <strong>Customer Email:</strong> {order.user.email}
+        </p>
+        <p className="mb-2">
+          <strong>Customer Phone:</strong> {order.user.phone}
+        </p>
+        <p className="mb-2">
           <strong>Address:</strong> {order.customerAddress.houseNumber},{" "}
           {order.customerAddress.village}, {order.customerAddress.street},{" "}
           {order.customerAddress.alley
@@ -56,6 +66,9 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           {order.customerAddress.country}
         </p>
         <p className="mb-2">
+          <strong>Total Price:</strong> {order.totalAmount} THB
+        </p>
+        <p className="mb-2">
           <strong>Status:</strong>
         </p>
 
@@ -64,13 +77,38 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           value={selectedStatus || order.status}
           onChange={handleStatusChange}
           className="border p-2 rounded mb-4 w-full"
+          disabled={
+            order.status === OrderStatus.WAITING_PAYMENT_CONFIRMATION ||
+            order.status === OrderStatus.SUCCESS
+          }
         >
           {Object.values(OrderStatus).map((status) => (
             <option key={status} value={status}>
-              {status}
+              {getOrderStatusText(status)}
             </option>
           ))}
         </select>
+
+        {/* Show Payment Slip Image */}
+        {order.status === OrderStatus.WAITING_PAYMENT_CONFIRMATION && (
+          <div className="text-center">
+            {!isImageLoaded && (
+              <span className="text-center loading loading-spinner loading-md"></span>
+            )}
+
+            {/* Image */}
+            <Image
+              alt="Payment Slip"
+              src={order.slipImageUrl!}
+              width={1200}
+              height={1200}
+              onLoad={() => setIsImageLoaded(true)}
+              className={`transition-opacity duration-500 rounded-md ${
+                isImageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          </div>
+        )}
 
         <p className="mb-2">
           <strong>Created At:</strong> {order.createdAt.toLocaleString()}
