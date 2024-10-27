@@ -16,7 +16,6 @@ const OrderManagement = () => {
   );
   const { data: session } = useSession();
 
-
   const { data: allOrders, isLoading } = useGetAllOrder();
 
   if (allOrders) {
@@ -85,10 +84,17 @@ const OrderManagement = () => {
 
   const renderOrders = (filteredOrders: MarketingOrder[]) => {
     // Filter orders to only include those with the desired statuses for STORE role
-    const allowedStatuses = ["Preparing", "Shipped", "Succeeded"];
-    const filteredForStore = session?.user?.role === "STORE"
-      ? filteredOrders.filter((order) => allowedStatuses.includes(order.status))
-      : filteredOrders;
+    const allowedStatuses = [
+      "PREPARING",
+      "SHIPPED",
+      "SUCCESS",
+    ] as OrderStatus[];
+    const filteredForStore =
+      session?.user?.role === "STORE"
+        ? filteredOrders.filter((order) =>
+            allowedStatuses.includes(order.status),
+          )
+        : filteredOrders;
 
     return filteredForStore.length > 0 ? (
       filteredForStore.map((order) => (
@@ -142,7 +148,6 @@ const OrderManagement = () => {
     );
   };
 
-
   const getStatusColor = (status: OrderStatus) => {
     switch (status) {
       case OrderStatus.WAITING_PAYMENT:
@@ -180,10 +185,11 @@ const OrderManagement = () => {
         <div className="flex items-center flex-wrap gap-2 mb-4">
           <button
             onClick={() => handleStatusFilter("")}
-            className={`px-4 py-2 rounded ${selectedStatus === ""
+            className={`px-4 py-2 rounded ${
+              selectedStatus === ""
                 ? "bg-blue-500 text-white"
                 : "bg-gray-200 text-gray-700"
-              }`}
+            }`}
           >
             All
           </button>
@@ -199,15 +205,15 @@ const OrderManagement = () => {
               <button
                 key={status}
                 onClick={() => handleStatusFilter(status)}
-                className={`px-4 py-2 rounded ${selectedStatus === status
+                className={`px-4 py-2 rounded ${
+                  selectedStatus === status
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200 text-gray-700"
-                  }`}
+                }`}
               >
                 {getOrderStatusText(status)}
               </button>
             ))}
-
         </div>
 
         {renderOrders(getFilteredOrders())}
