@@ -6,6 +6,8 @@ import { getOrderStatusText } from "@/lib/orderStatusText";
 import Image from "next/image";
 import useVerifySlip from "@/api/employee/useConfirmSlip";
 import { useQueryClient } from "@tanstack/react-query";
+import useProduct from "@/api/user/useProduct";
+import { Product } from "@/interfaces/Product";
 
 interface OrderDetailModalProps {
   order: EmployeeOrder | null;
@@ -20,6 +22,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
 }) => {
   const verifySlipMutation = useVerifySlip();
   const queryClient = useQueryClient();
+  const { data: products, isLoading, error } = useProduct();
 
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | null>(
     order ? order.status : null,
@@ -66,8 +69,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           <strong>Order ID:</strong> {order.id}
         </p>
         <p className="mb-2">
-          <strong>Customer Name:</strong> {order.user.firstName}{" "}
-          {order.user.lastName}
+          <strong>Customer Name:</strong> {order.user.firstName} {order.user.lastName}
         </p>
         <p className="mb-2">
           <strong>Customer Email:</strong> {order.user.email}
@@ -78,15 +80,38 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
         <p className="mb-2">
           <strong>Address:</strong> {order.customerAddress.houseNumber},{" "}
           {order.customerAddress.village}, {order.customerAddress.street},{" "}
-          {order.customerAddress.alley
-            ? `Alley: ${order.customerAddress.alley}, `
-            : ""}
+          {order.customerAddress.alley ? `Alley: ${order.customerAddress.alley}, ` : ""}
           {order.customerAddress.subDistrict}, {order.customerAddress.district},{" "}
-          {order.customerAddress.province}, Postal Code:{" "}
-          {order.customerAddress.postalCode}, Country:{" "}
-          {order.customerAddress.country}
+          {order.customerAddress.province}, Postal Code: {order.customerAddress.postalCode},
+          Country: {order.customerAddress.country}
         </p>
-        <p className="mb-2">
+        <p>
+          <strong>Order Items:</strong>
+          {order.orderItems.map((item, index) => {
+                      const product = products?.find(
+                        (product) => product.id === item.productId,
+                      );
+                      const productSize = product?.productSizes.find(
+                        (size) => size.id === item.productSizeId,
+                      );
+
+                      if (!product || !productSize) {
+                        return (
+                          <li key={index} className="text-sm text-gray-500">
+                            Product information not found.
+                          </li>
+                        );
+                      }
+
+                      return (
+                        <li key={index} className="text-sm text-gray-700">
+                          {product.name} ({productSize.name}) - Quantity:{" "}
+                          {item.quantity} - Price: {productSize.price} THB
+                        </li>
+                      );
+                    })}
+        </p>
+        <p className="mb-2 mt-5">
           <strong>Total Price:</strong> {order.totalAmount} THB
         </p>
         <p className="mb-2">
@@ -110,8 +135,9 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           ))}
         </select>
         <p className="mb-2">
-          <strong>Created At:</strong> {order.createdAt.toLocaleString()}
+          <strong>Created At:</strong> {new Date(order.createdAt).toLocaleString()}
         </p>
+        
         {/* Show Payment Slip Image */}
         {order.status === OrderStatus.WAITING_PAYMENT_CONFIRMATION && (
           <div className="text-center mt-3">
@@ -119,7 +145,6 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               <span className="text-center loading loading-spinner loading-md"></span>
             )}
 
-            {/* Image */}
             <Image
               alt="Payment Slip"
               src={order.slipImageUrl!}
