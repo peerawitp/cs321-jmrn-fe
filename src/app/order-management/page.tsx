@@ -6,6 +6,8 @@ import useGetAllOrder from "@/api/employee/useGetAllOrder";
 import { EmployeeOrder, Order, OrderStatus } from "@/interfaces/Order";
 import { getOrderStatusText } from "@/lib/orderStatusText";
 import { signOut, useSession } from "next-auth/react";
+import useUpdateOrderStatus from "@/api/employee/useUpdateOrderStatus";
+import { useQueryClient } from "@tanstack/react-query";
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState<EmployeeOrder[]>();
@@ -17,6 +19,9 @@ const OrderManagement = () => {
   const { data: session } = useSession();
 
   const { data: allOrders, isLoading } = useGetAllOrder();
+
+  const queryClient = useQueryClient();
+  const updateOrderStatusMutation = useUpdateOrderStatus();
 
   if (allOrders) {
     console.log(allOrders);
@@ -44,16 +49,22 @@ const OrderManagement = () => {
     setSelectedOrder(null);
   };
 
-  const handleUpdateStatus = (orderId: number, newStatus: OrderStatus) => {
-    setOrders((prevOrders) =>
-      prevOrders?.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order,
-      ),
+  const handleUpdateStatus = async (
+    orderId: number,
+    newStatus: OrderStatus,
+  ) => {
+    await updateOrderStatusMutation.mutateAsync(
+      { orderId, status: newStatus },
+      {
+        onSuccess: () => {
+          alert("Update status successfully!");
+          queryClient.invalidateQueries({ queryKey: ["getAllOrder"] });
+        },
+        onError: (error) => {
+          alert("An error occurred. " + error.message);
+        },
+      },
     );
-
-    if (selectedOrder && selectedOrder.id === orderId) {
-      setSelectedOrder({ ...selectedOrder, status: newStatus });
-    }
   };
 
   const getFilteredOrders = () => {
