@@ -88,10 +88,12 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
             </option>
           ))}
         </select>
-
+        <p className="mb-2">
+          <strong>Created At:</strong> {order.createdAt.toLocaleString()}
+        </p>
         {/* Show Payment Slip Image */}
         {order.status === OrderStatus.WAITING_PAYMENT_CONFIRMATION && (
-          <div className="text-center">
+          <div className="text-center mt-3">
             {!isImageLoaded && (
               <span className="text-center loading loading-spinner loading-md"></span>
             )}
@@ -103,16 +105,23 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               width={1200}
               height={1200}
               onLoad={() => setIsImageLoaded(true)}
-              className={`transition-opacity duration-500 rounded-md ${
-                isImageLoaded ? "opacity-100" : "opacity-0"
-              }`}
+              className={`transition-opacity duration-500 rounded-md ${isImageLoaded ? "opacity-100" : "opacity-0"
+                }`}
             />
+            <div className="flex gap-5 mt-3">         
+              <button
+                onClick={() => onUpdateStatus(order.id, OrderStatus.CANCELLED)}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+              >Cancel Billing</button>
+              <button
+                onClick={() => onUpdateStatus(order.id, OrderStatus.PREPARING)}
+                className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
+              >Confirm Billing</button>
+            </div>
           </div>
         )}
 
-        <p className="mb-2">
-          <strong>Created At:</strong> {order.createdAt.toLocaleString()}
-        </p>
+        
 
         {/* Buttons */}
         <div className="flex justify-end gap-2 mt-4">
