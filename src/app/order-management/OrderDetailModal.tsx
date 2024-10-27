@@ -108,22 +108,11 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               className={`transition-opacity duration-500 rounded-md ${isImageLoaded ? "opacity-100" : "opacity-0"
                 }`}
             />
-            <div className="flex gap-5 mt-3">         
-              <button
-                onClick={() => onUpdateStatus(order.id, OrderStatus.CANCELLED)}
-                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
-              >Cancel Billing</button>
-              <button
-                onClick={() => onUpdateStatus(order.id, OrderStatus.PREPARING)}
-                className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
-              >Confirm Billing</button>
-            </div>
+
           </div>
         )}
 
-        
 
-        {/* Buttons */}
         <div className="flex justify-end gap-2 mt-4">
           <button
             onClick={onClose}
@@ -131,12 +120,32 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           >
             Cancel
           </button>
-          <button
-            onClick={handleConfirm}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Confirm
-          </button>
+          {order.status === OrderStatus.WAITING_PAYMENT_CONFIRMATION && (
+            <>
+              <button
+                onClick={() => onUpdateStatus(order.id, OrderStatus.CANCELLED)}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+              >
+                Cancel Billing
+              </button>
+              <button
+                onClick={() => onUpdateStatus(order.id, OrderStatus.PREPARING)}
+                className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
+              >
+                Confirm Billing
+              </button>
+            </>
+          )}
+
+          {order.status !== OrderStatus.WAITING_PAYMENT_CONFIRMATION && (
+            <button
+              onClick={handleConfirm}
+              className="px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Confirm
+            </button>
+          )}
+          
         </div>
       </div>
     </div>
