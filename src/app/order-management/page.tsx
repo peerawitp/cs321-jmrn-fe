@@ -176,7 +176,7 @@ const OrderManagement = () => {
                 : "bg-gray-200 text-gray-700"
             }`}
           >
-            ทั้งหมด
+            All
           </button>
           {Object.values(OrderStatus).map((status) => (
             <button
