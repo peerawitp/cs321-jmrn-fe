@@ -110,8 +110,8 @@ const OrderDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-5xl mx-auto bg-white p-6 rounded shadow-lg">
-        <h1 className="text-3xl font-bold mb-6 text-center">
+      <div className="max-w-5xl mx-auto bg-white p-6 rounded shadow-lg ">
+        <h1 className="text-3xl font-bold mb-6 text-center py-2 border-b-2">
           Order #{order.id}
         </h1>
         {/* Loading Animation */}
@@ -130,22 +130,23 @@ const OrderDetail: React.FC = () => {
           onChange={handleFileChange}
         />
 
+        <p className="text-lg text-center mb-6">
+          Here are the details of your order.
+        </p>
+
         {order.status === OrderStatus.WAITING_PAYMENT && (
-          <div className="relative">
+          <div className="text-center mt-4">
             <button
               onClick={handleButtonClick}
-              className="absolute top-2 right-2 rounded-md px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white"
+              className="rounded-md px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white mb-4"
             >
               <FontAwesomeIcon icon={faUpload} className="px-1" />
               Upload Payment Slip
             </button>
           </div>
         )}
-        <p className="text-lg text-center mb-6">
-          Here are the details of your order.
-        </p>
         <div className="bg-gray-50 p-6 rounded mb-6 shadow-md">
-          <h3 className="text-lg font-semibold mb-2">Shipping Information</h3>
+          <h3 className="text-xl font-bold  mb-2 py-2 border-b-2">Shipping Information</h3>
           <p>
             {userInfo?.firstName} {userInfo?.lastName}
           </p>
@@ -161,8 +162,8 @@ const OrderDetail: React.FC = () => {
         </div>
 
         <div className="bg-gray-50 p-6 rounded mb-6 shadow-md">
-          <h2 className="text-xl font-bold mb-4">Order Details</h2>
-          <p className="text-gray-700">
+          <h2 className="text-xl font-bold mb-4 py-2 border-b-2">Order Details</h2>
+          <p className="text-gray-700 ">
             Order Date: {order.createdAt.toLocaleString()}
           </p>
           <p className="text-gray-700 mb-4">
@@ -211,37 +212,40 @@ const OrderDetail: React.FC = () => {
           </div>
         </div>
 
-        {order.status === OrderStatus.SHIPPED && (
-          <div className="text-center mt-4">
-            <button
-              onClick={confirmDelivery}
-              className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600"
-            >
-              Confirm Delivery
-            </button>
-          </div>
-        )}
-        {order.status === OrderStatus.WAITING_PAYMENT && (
-          <div className="text-center mt-4">
-            <button
-              onClick={cancelOrder}
-              className="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600"
-            >
-              Cancel Order
-            </button>
-          </div>
-        )}
 
-        <div className="text-center mt-8">
-          <button
-            onClick={() => router.push("/order-history")}
-            className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            Back to Order History
-          </button>
+
+        <div className="flex justify-end space-x-4 mt-4">
+          {order.status === OrderStatus.SHIPPED && (
+            <div className="text-center mt-4">
+              <button
+                onClick={confirmDelivery}
+                className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600"
+              >
+                Confirm Delivery
+              </button>
+            </div>
+          )}
+          {order.status === OrderStatus.WAITING_PAYMENT && (
+            <div className="text-center mt-4">
+              <button
+                onClick={cancelOrder}
+                className="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Cancel Order
+              </button>
+            </div>
+          )}
+
+          <div className="text-center mt-4">
+            <button
+              onClick={() => router.push("/order-history")}
+              className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              Back to Order History
+            </button>
+          </div>
         </div>
       </div>
-
       {/* CSS for loader */}
       <style jsx>{`
         .loader {

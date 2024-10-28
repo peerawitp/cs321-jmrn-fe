@@ -82,7 +82,7 @@ const OrderHistory: React.FC = () => {
                 className="bg-gray-50 p-6 rounded-lg shadow cursor-pointer hover:bg-gray-100 transition duration-150"
                 onClick={() => handleCardClick(order.id)}
               >
-                <h2 className="text-xl font-semibold mb-3">
+                <h2 className="text-xl font-semibold mb-3 py-2 border-b-2">
                   Order #{order.id}
                 </h2>
                 <p className="text-sm text-gray-600 mb-1">
