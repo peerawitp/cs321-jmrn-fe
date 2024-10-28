@@ -26,8 +26,52 @@ export default function ProductPage() {
   }
 
   if (isLoading) {
-    return <p className="text-center mt-8">Loading...</p>;
+    return (
+      <div className="container mx-auto mt-8 px-4 py-8 bg-white rounded-lg shadow-lg max-w-5xl animate-pulse">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Left Section: Image Skeleton */}
+          <div className="w-full h-64 bg-gray-300 rounded-lg"></div>
+
+          {/* Right Section: Product Details Skeleton */}
+          <div>
+            <div className="h-8 bg-gray-300 rounded w-3/4 mb-4"></div>
+            <div className="h-5 bg-gray-300 rounded w-1/2 mb-2"></div>
+            <div className="h-4 bg-gray-300 rounded w-1/3 mb-6"></div>
+
+            {/* Size Selection Skeleton */}
+            <div className="h-10 bg-gray-300 rounded w-full mb-4"></div>
+
+            {/* Selected Size Information Skeleton */}
+            <div className="bg-gray-100 p-4 rounded-lg shadow mb-6">
+              <div className="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+              <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
+              <div className="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+            </div>
+
+            {/* Quantity Adjuster and Add to Cart Button Skeleton */}
+            <div className="flex items-center space-x-4">
+              <div className="h-10 bg-gray-300 rounded w-16"></div>
+              <div className="h-10 bg-gray-300 rounded w-16"></div>
+              <div className="h-10 bg-gray-300 rounded w-full"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Description Section Skeleton */}
+        <div className="bg-gray-100 mt-8 p-4 rounded-lg">
+          <div className="h-6 bg-gray-300 rounded w-1/4 mb-4"></div>
+          <div className="space-y-2">
+            <div className="h-4 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+            <div className="h-4 bg-gray-300 rounded w-4/5"></div>
+          </div>
+        </div>
+      </div>
+    );
   }
+
 
   const product = products?.find((p) => p.id === Number(productId));
 

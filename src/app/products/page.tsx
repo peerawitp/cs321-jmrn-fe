@@ -2,26 +2,24 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import CategorySelection from "../components/CategorySelection"; // นำเข้า CategorySelection
-import ProductCard from "../components/ProductCard"; // นำเข้า ProductCard
+import CategorySelection from "../components/CategorySelection";
+import ProductCard from "../components/ProductCard";
 import useProduct from "@/api/user/useProduct";
 import { Product } from "@/interfaces/Product";
 
 const ProductsPage = () => {
-  const searchParams = useSearchParams(); // ใช้สำหรับดึง query params
-  const initialCategory = searchParams.get("category"); // ดึงค่าหมวดหมู่จาก URL
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    initialCategory,
+    initialCategory
   );
 
   const { data: products, isLoading, error } = useProduct();
 
-  // ฟังก์ชันสำหรับการกรองสินค้าตามหมวดหมู่
   const filteredProducts = selectedCategory
     ? products?.filter((product: Product) => product.type === selectedCategory)
     : products;
 
-  // เมื่อพารามิเตอร์หมวดหมู่เปลี่ยน ให้ตั้งค่า selectedCategory ใหม่
   useEffect(() => {
     setSelectedCategory(initialCategory);
   }, [initialCategory]);
@@ -30,19 +28,28 @@ const ProductsPage = () => {
     <div className="container mx-auto mt-8 px-4 py-8 bg-white rounded-lg shadow-lg">
       <h1 className="text-3xl font-bold mb-6 border-b-2 py-2">Products</h1>
 
-      {/* ปุ่มเลือกหมวดหมู่ */}
       <CategorySelection
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
 
-      {/* แสดงสินค้าตามหมวดหมู่ที่เลือก */}
-      {filteredProducts && filteredProducts.length > 0 ? (
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, index) => (
+            <div
+              key={index}
+              className="p-4 bg-gray-50 rounded-lg shadow animate-pulse flex flex-col"
+            >
+              <div className="h-40 bg-gray-300 rounded mb-4"></div>
+              <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      ) : filteredProducts && filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product: Product) => (
             <Link key={product.id} href={`/products/${product.id}`}>
-              {/* ใช้ ProductCard แสดงผลสินค้า */}
-
               <ProductCard product={product} />
             </Link>
           ))}

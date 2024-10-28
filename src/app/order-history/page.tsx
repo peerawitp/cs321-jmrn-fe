@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import useOrderHistory from "@/api/user/useOrderHistory";
 import useProduct from "@/api/user/useProduct";
@@ -8,9 +8,9 @@ import { getOrderStatusText } from "@/lib/orderStatusText";
 
 const OrderHistory: React.FC = () => {
   const router = useRouter();
-
   const { data: products } = useProduct();
-  const { data: orderHistory } = useOrderHistory();
+  const { data: orderHistory, isLoading } = useOrderHistory();
+
   const getStatusColor = (status: OrderStatus) => {
     switch (status) {
       case OrderStatus.WAITING_PAYMENT:
@@ -29,9 +29,8 @@ const OrderHistory: React.FC = () => {
         return "text-gray-500";
     }
   };
-  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "ALL">(
-    "ALL",
-  );
+
+  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "ALL">("ALL");
 
   const handleCardClick = (orderId: number) => {
     router.push(`/order-history/${orderId}`);
@@ -74,7 +73,24 @@ const OrderHistory: React.FC = () => {
           ))}
         </div>
 
-        {filteredOrders && filteredOrders.length > 0 ? (
+        {isLoading ? (
+          // Skeleton loading state
+          <div className="space-y-6 animate-pulse">
+            {[...Array(3)].map((_, index) => (
+              <div
+                key={index}
+                className="bg-gray-50 p-6 rounded-lg shadow"
+              >
+                <div className="h-6 bg-gray-300 rounded w-1/3 mb-2"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/5 mb-3"></div>
+
+                <div className="h-4 bg-gray-300 rounded w-2/3 mb-1"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+              </div>
+            ))}
+          </div>
+        ) : filteredOrders && filteredOrders.length > 0 ? (
           <div className="space-y-6">
             {filteredOrders.map((order) => (
               <div
@@ -103,10 +119,10 @@ const OrderHistory: React.FC = () => {
                   <ul className="list-disc list-inside">
                     {order.orderItems.map((item, index) => {
                       const product = products?.find(
-                        (product) => product.id === item.productId,
+                        (product) => product.id === item.productId
                       );
                       const productSize = product?.productSizes.find(
-                        (size) => size.id === item.productSizeId,
+                        (size) => size.id === item.productSizeId
                       );
 
                       if (!product || !productSize) {
@@ -119,8 +135,8 @@ const OrderHistory: React.FC = () => {
 
                       return (
                         <li key={index} className="text-sm text-gray-700">
-                          {product.name} ({productSize.name}) - Quantity:{" "}
-                          {item.quantity} - Price: {productSize.price} THB
+                          {product.name} ({productSize.name}) - Quantity: {item.quantity} - Price:{" "}
+                          {productSize.price} THB
                         </li>
                       );
                     })}
