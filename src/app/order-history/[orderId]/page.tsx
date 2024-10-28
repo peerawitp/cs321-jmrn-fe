@@ -98,6 +98,7 @@ const OrderDetail: React.FC = () => {
       {
         onSuccess: () => {
           alert("Order has been cancelled!");
+          queryClient.invalidateQueries({ queryKey: ["products"] });
           queryClient.invalidateQueries({ queryKey: ["orderHistory"] });
         },
         onError: (error) => {
