@@ -87,10 +87,7 @@ const OrderManagement = () => {
       );
     }
 
-    return filteredOrders.sort(
-      (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-    );
+    return filteredOrders.sort((a, b) => b.id - a.id);
   };
 
   const renderOrders = (filteredOrders: EmployeeOrder[]) => {

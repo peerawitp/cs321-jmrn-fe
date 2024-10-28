@@ -41,6 +41,9 @@ const OrderHistory: React.FC = () => {
       ? orderHistory
       : orderHistory?.filter((order) => order.status === selectedStatus);
 
+  // Sort the filtered orders by ID in ascending order
+  const sortedOrders = filteredOrders?.sort((a, b) => b.id - a.id);
+
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-6">
       <div className="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-md">
@@ -90,9 +93,9 @@ const OrderHistory: React.FC = () => {
               </div>
             ))}
           </div>
-        ) : filteredOrders && filteredOrders.length > 0 ? (
+        ) : sortedOrders && sortedOrders.length > 0 ? (
           <div className="space-y-6">
-            {filteredOrders.map((order) => (
+            {sortedOrders.map((order) => (
               <div
                 key={order.id}
                 className="bg-gray-50 p-6 rounded-lg shadow cursor-pointer hover:bg-gray-100 transition duration-150"
