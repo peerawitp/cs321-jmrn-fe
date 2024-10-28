@@ -11,7 +11,24 @@ const OrderHistory: React.FC = () => {
 
   const { data: products } = useProduct();
   const { data: orderHistory } = useOrderHistory();
-
+  const getStatusColor = (status: OrderStatus) => {
+    switch (status) {
+      case OrderStatus.WAITING_PAYMENT:
+        return "text-yellow-500";
+      case OrderStatus.WAITING_PAYMENT_CONFIRMATION:
+        return "text-yellow-800";
+      case OrderStatus.PREPARING:
+        return "text-blue-500";
+      case OrderStatus.SHIPPED:
+        return "text-indigo-500";
+      case OrderStatus.SUCCESS:
+        return "text-green-500";
+      case OrderStatus.CANCELLED:
+        return "text-red-500";
+      default:
+        return "text-gray-500";
+    }
+  };
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "ALL">(
     "ALL",
   );
@@ -76,7 +93,7 @@ const OrderHistory: React.FC = () => {
                 </p>
                 <p className="text-sm text-gray-600 mb-3">
                   Status:{" "}
-                  <span className="font-semibold text-gray-800">
+                  <span className={`font-semibold text-gray-800 ${getStatusColor(order.status)}`}>
                     {getOrderStatusText(order.status)}
                   </span>
                 </p>
