@@ -9,7 +9,7 @@ import { Product } from "@/interfaces/Product";
 
 const Table = () => {
     const router = useRouter();
-    const { data: products } = useProduct();
+    const { data: products } = useProduct(); 
     const [selectedID, setSelectedID] = useState<number | null>(null);
     const { register, handleSubmit, reset, getValues } = useForm<Product>({
         defaultValues: {

@@ -38,7 +38,9 @@ const TableRow: React.FC<TableRowProps> = ({
     `}
       onClick={handleClick}
     >
-      <td className="break-words border border-gray-300 p-2">{product.id}</td>
+      <td className="break-words border border-gray-300 p-2">
+        {product.id}
+      </td>
       <td className="break-words border-r border-gray-300 p-2">
         {product.name}
       </td>
