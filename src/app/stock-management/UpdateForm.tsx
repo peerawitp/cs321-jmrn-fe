@@ -7,15 +7,16 @@ import { useForm } from "react-hook-form";
 
 interface UpdateFormProps {
   closePopUp: () => void; // Function with no arguments, returning nothing
+  id: number;
 }
 
-const findProductByID = (id: string) => {
+const findProductByID = (id: number) => {
   return product.find((product) => product.id === id);
 };
 
-const UpdateForm: React.FC<UpdateFormProps> = ({ closePopUp }) => {
-  const { id } = useContext(Context);
-  // console.log(id);
+const UpdateForm: React.FC<UpdateFormProps> = ({ closePopUp, id }) => {
+  // const { id } = useContext(Context);
+  console.log(id);
 
   const { register, handleSubmit, setValue } = useForm();
 

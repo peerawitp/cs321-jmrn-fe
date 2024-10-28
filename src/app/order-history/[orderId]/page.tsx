@@ -17,6 +17,7 @@ import useUploadSlip from "@/api/user/useUploadSlip";
 
 const OrderDetail: React.FC = () => {
   const { orderId } = useParams();
+  console.log(orderId)
   const router = useRouter();
   const { data: orderHistory, isLoading, error } = useOrderHistory();
   const { data: products } = useProduct();
