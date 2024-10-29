@@ -154,7 +154,7 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
                             <input
                                 {...register("overallDiameter")}
                                 id="overallDiameter"
-                type="number"
+                                type="number"
                                 className="w-full p-2 border rounded"
                                 placeholder="Overall Diameter"
                             />
@@ -169,7 +169,7 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
                             <input
                                 {...register("overallWidth")}
                                 id="overallWidth"
-                type="number"
+                                type="number"
                                 className="w-full p-2 border rounded"
                                 placeholder="Overall Width"
                             />
@@ -212,7 +212,7 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
                             <input
                                 {...register("price")}
                                 id="price"
-                type="number"
+                                type="number"
                                 className="w-full p-2 border rounded"
                                 placeholder="Price"
                             />
@@ -227,85 +227,62 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
                             <input
                                 {...register("quantity")}
                                 id="quantity"
-                type="number"
+                                type="number"
                                 className="w-full p-2 border rounded"
                                 placeholder="Quantity"
                             />
                         </div>
                     </div>
-
-                    <div className="gap-1 mt-6 flex justify-start">
-                        <button
-                            type="submit"
-                            className="btn bg-[#387ADF] hover:bg-[#2558a5] text-white"
-                        >
-                            Create
-                        </button>
-                        <button
-                            type="button"
-                            className="btn bg-slate-200"
-                            onClick={updateHandler}
-                        >
-                            Update
-                        </button>
-                        <button
-                            type="button"
-                            className="btn bg-[#EC5A5A] hover:bg-[#ff4a4a] text-white"
-                        >
-                            Delete
-                        </button>
-                    </div>
                 </form>
-          <div className="gap-1 mt-6 flex justify-start">
-            <button
-              type="submit"
-              className="btn bg-[#387ADF] hover:bg-[#2558a5] text-white"
-            >
-              Create
-            </button>
-            <button
-              type="button"
-              className="btn bg-slate-200"
-              onClick={updateHandler}
-            >
-              Update
-            </button>
-          </div>
-        </form>
+                <div className="gap-1 mt-6 flex justify-start">
+                    <button
+                        type="submit"
+                        className="btn bg-[#387ADF] hover:bg-[#2558a5] text-white"
+                    >
+                        Create
+                    </button>
+                    <button
+                        type="button"
+                        className="btn bg-slate-200"
+                        onClick={updateHandler}
+                    >
+                        Update
+                    </button>
+                </div>
 
-                <div className="mb-4 mt-2">
-                    <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-                </div>
-                <div className="overflow-y-auto max-h-60 relative">
-                    <table className="shadow-lg border-collapse min-w-full table-auto justify-center text-center">
-                        <thead className="border-y border-gray-300 sticky top-0 bg-white z-10">
-                            <tr>
-                                <th className="p-2 border border-gray-300">ID</th>
-                                <th className="p-2 border border-gray-300">product id</th>
-                                <th className="p-2 border border-gray-300">name</th>
-                                <th className="p-2 border border-gray-300">overall diameter</th>
-                                <th className="p-2 border border-gray-300">overall width</th>
-                                <th className="p-2 border border-gray-300">measurement rim</th>
-                                <th className="p-2 border border-gray-300">standard rim</th>
-                                <th className="p-2 border border-gray-300">price</th>
-                                <th className="p-2 border border-gray-300">quantity</th>
-                                <th className="p-2 border border-gray-300">updated at</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredProductSizes.map((productSize) => (
-                                <ProductDetailTableRow
-                                    key={productSize.id}
-                                    productDetail={productSize}
-                                    isSelected={selectedID === productSize.id}
-                                    onRowClick={() => handleRowClick(productSize)}
-                                />
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+            <div className="mb-4 mt-2">
+                <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             </div>
-        </div>
+            <div className="overflow-y-auto max-h-60 relative">
+                <table className="shadow-lg border-collapse min-w-full table-auto justify-center text-center">
+                    <thead className="border-y border-gray-300 sticky top-0 bg-white z-10">
+                        <tr>
+                            <th className="p-2 border border-gray-300">ID</th>
+                            <th className="p-2 border border-gray-300">product id</th>
+                            <th className="p-2 border border-gray-300">name</th>
+                            <th className="p-2 border border-gray-300">overall diameter</th>
+                            <th className="p-2 border border-gray-300">overall width</th>
+                            <th className="p-2 border border-gray-300">measurement rim</th>
+                            <th className="p-2 border border-gray-300">standard rim</th>
+                            <th className="p-2 border border-gray-300">price</th>
+                            <th className="p-2 border border-gray-300">quantity</th>
+                            <th className="p-2 border border-gray-300">updated at</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredProductSizes.map((productSize) => (
+                            <ProductDetailTableRow
+                                key={productSize.id}
+                                productDetail={productSize}
+                                isSelected={selectedID === productSize.id}
+                                onRowClick={() => handleRowClick(productSize)}
+                            />
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div >
+        </div >
     );
 };
 
