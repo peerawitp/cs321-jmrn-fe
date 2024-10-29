@@ -218,9 +218,6 @@ const Table = () => {
             >
               Update
             </button>
-            <button className="btn bg-[#EC5A5A] hover:bg-[#ff4a4a] text-white">
-              Delete
-            </button>
           </div>
         </form>
 

@@ -183,12 +183,6 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
             >
               Update
             </button>
-            <button
-              type="button"
-              className="btn bg-[#EC5A5A] hover:bg-[#ff4a4a] text-white"
-            >
-              Delete
-            </button>
           </div>
         </form>
 
