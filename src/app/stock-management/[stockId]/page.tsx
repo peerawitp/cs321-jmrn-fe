@@ -65,17 +65,45 @@ const ProductDetail = () => {
                 <h1 className="font-bold text-2xl mb-4">Stock Management</h1>
 
                 <form onSubmit={handleSubmit(submitHandler)}>
-                    <div className="grid grid-cols-2 gap-4">
-                        <input {...register("name")} id='name' className="p-2 border rounded" placeholder="Product name" />
-                        <input {...register("overallDiameter")} id='overallDiameter' className="p-2 border rounded" placeholder="overallDiameter" />
-                        <input {...register("overallWidth")} id='overallWidth' className="p-2 border rounded" placeholder="overallWidth" />
-                        <input {...register("measurementRim")} id='measurementRim' className="p-2 border rounded" placeholder="measurementRim" />
-                        <input {...register("standardRim")} id='standardRim' className="p-2 border rounded" placeholder="standardRim" />
-                        <input {...register("price")} id='price' className="p-2 border rounded" placeholder="price"/>
-                        <input {...register("quantity")} id='quantity' className="p-2 border rounded" placeholder="quantity"/>
-                        <input {...register("createdAt")} id='createdAt' className="p-2 border rounded" placeholder="createdAt"/>
-                        <input {...register("updatedAt")} id='updatedAt' className="p-2 border rounded" placeholder="updatedAt"/>
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+        <input {...register("name")} id="name" className="w-full p-2 border rounded" placeholder="Product name" />
+    </div>
+    <div>
+        <label htmlFor="overallDiameter" className="block text-sm font-medium text-gray-700 mb-1">Overall Diameter</label>
+        <input {...register("overallDiameter")} id="overallDiameter" className="w-full p-2 border rounded" placeholder="Overall Diameter" />
+    </div>
+    <div>
+        <label htmlFor="overallWidth" className="block text-sm font-medium text-gray-700 mb-1">Overall Width</label>
+        <input {...register("overallWidth")} id="overallWidth" className="w-full p-2 border rounded" placeholder="Overall Width" />
+    </div>
+    <div>
+        <label htmlFor="measurementRim" className="block text-sm font-medium text-gray-700 mb-1">Measurement Rim</label>
+        <input {...register("measurementRim")} id="measurementRim" className="w-full p-2 border rounded" placeholder="Measurement Rim" />
+    </div>
+    <div>
+        <label htmlFor="standardRim" className="block text-sm font-medium text-gray-700 mb-1">Standard Rim</label>
+        <input {...register("standardRim")} id="standardRim" className="w-full p-2 border rounded" placeholder="Standard Rim" />
+    </div>
+    <div>
+        <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+        <input {...register("price")} id="price" className="w-full p-2 border rounded" placeholder="Price" />
+    </div>
+    <div>
+        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+        <input {...register("quantity")} id="quantity" className="w-full p-2 border rounded" placeholder="Quantity" />
+    </div>
+    <div>
+        <label htmlFor="createdAt" className="block text-sm font-medium text-gray-700 mb-1">Created At</label>
+        <input {...register("createdAt")} id="createdAt" className="w-full p-2 border rounded" placeholder="Created At" />
+    </div>
+    <div>
+        <label htmlFor="updatedAt" className="block text-sm font-medium text-gray-700 mb-1">Updated At</label>
+        <input {...register("updatedAt")} id="updatedAt" className="w-full p-2 border rounded" placeholder="Updated At" />
+    </div>
+</div>
+
 
                     {/* Button */}
                     <div className="gap-1 mt-[50px] mb-[10px] flex justify-start">
