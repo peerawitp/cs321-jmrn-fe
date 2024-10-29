@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { categories } from "@/data/categories";
 
 interface CategorySelectionProps {
   selectedCategory: string | null;
