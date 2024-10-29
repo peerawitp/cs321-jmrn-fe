@@ -9,11 +9,15 @@ import { Product } from "@/interfaces/Product";
 import { WheelType } from "@/enums/WheelType";
 import { TireType } from "@/enums/TireType";
 import { AddProduct } from "@/interfaces/AddProduct";
+import useAddProduct from "@/api/employee/useAddProduct";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Table = () => {
   const router = useRouter();
+  const [file, setFile] = useState<File | null>(null);
   const { data: products } = useProduct();
   const [selectedID, setSelectedID] = useState<number | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
   const { register, handleSubmit, reset, getValues } = useForm<AddProduct>({
     defaultValues: {
       name: "",
@@ -21,9 +25,11 @@ const Table = () => {
       patternAndType: "",
       wheel: "" as WheelType,
       type: "" as TireType,
-      image: null,
     },
   });
+
+  const addProductMutation = useAddProduct();
+  const queryClient = useQueryClient();
 
   const handleRowClick = (product: Product) => {
     if (selectedID === product.id) {
@@ -35,13 +41,29 @@ const Table = () => {
     }
   };
 
-  const submitHandler: SubmitHandler<AddProduct> = (data) => {
+  const submitHandler: SubmitHandler<AddProduct> = async (data) => {
     const exists = products?.some((product) => product.name === data.name);
     if (exists) {
-      console.log("This product is already exist");
+      alert("Product already exists");
     } else {
       console.log("Submitting:", data); // Log the submitted data
-      // Add code to send product data to the backend here
+      setIsCreating(true);
+
+      await addProductMutation.mutateAsync(
+        { ...data, image: file },
+        {
+          onSuccess: () => {
+            alert("Product added successfully!");
+            queryClient.invalidateQueries({ queryKey: ["products"] });
+            setIsCreating(false);
+          },
+          onError: (error) => {
+            alert("An error occurred. " + error.message);
+
+            setIsCreating(false);
+          },
+        },
+      );
 
       reset(); // Reset form fields
       setSelectedID(null); // Optionally reset selected ID
@@ -52,6 +74,15 @@ const Table = () => {
     console.log(selectedID);
     const updatedProduct = { ...getValues() };
     console.log("Updated product:" + updatedProduct.name);
+  };
+
+  // Custom file change handler
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = event.target.files;
+    console.log(fileList);
+    if (fileList && fileList.length > 0) {
+      setFile(fileList[0]);
+    }
   };
 
   return (
@@ -158,9 +189,19 @@ const Table = () => {
                 className="w-full p-2 border rounded-md file-input-bordered file-input"
                 type="file"
                 accept="image/*"
+                onChange={handleFileChange}
               />
             </div>
           </div>
+
+          {/* Loading Animation */}
+          {isCreating && (
+            <div className="text-center mt-4">
+              <p>Creating new product...</p>
+              <div className="loader"></div>
+            </div>
+          )}
+
           <div className="gap-1 mt-[50px] mb-[10px] flex justify-start">
             <button
               className="btn bg-[#387ADF] hover:bg-[#2558a5] text-white"
@@ -217,6 +258,27 @@ const Table = () => {
           </tbody>
         </table>
       </div>
+
+      <style jsx>{`
+        .loader {
+          border: 6px solid #f3f3f3; /* Light grey */
+          border-top: 6px solid #3498db; /* Blue */
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          animation: spin 1s linear infinite;
+          margin: 20px auto;
+        }
+
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </div>
   );
 };
