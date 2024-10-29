@@ -1,5 +1,4 @@
 "use client";
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import CategorySelection from "../components/CategorySelection";
@@ -8,10 +7,9 @@ import useProduct from "@/api/user/useProduct";
 import { Product } from "@/interfaces/Product";
 
 const ProductsPage = () => {
-  const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category");
+  const initialCategory = null;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    initialCategory
+    initialCategory,
   );
 
   const { data: products, isLoading, error } = useProduct();

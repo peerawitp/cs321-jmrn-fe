@@ -1,6 +1,5 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { categories } from "@/data/categories";
 
 export default function Home() {
   const router = useRouter();
@@ -17,17 +16,23 @@ export default function Home() {
   return (
     <>
       <div className="bg-white rounded shadow-lg container mx-auto mt-8 px-4 py-8">
-        <h1 className="text-4xl font-bold mb-4 text-center py-3 border-b-2">Welcome to Our Motorcycle Tire Shop!</h1>
+        <h1 className="text-4xl font-bold mb-4 text-center py-3 border-b-2">
+          Welcome to Our Motorcycle Tire Shop!
+        </h1>
         <p className="text-lg mb-3 text-center">
-          We provide high-quality motorcycle tires for every rider's needs. Explore our wide range of tires from
-          Scooter to Off-Road options, designed for both performance and durability.
+          We provide high-quality motorcycle tires for every rider's needs.
+          Explore our wide range of tires from Scooter to Off-Road options,
+          designed for both performance and durability.
         </p>
-        <p className="text-lg mb-6 text-center">Select a category below to get started!</p>
+        <p className="text-lg mb-6 text-center">
+          Select a category below to get started!
+        </p>
       </div>
       <div className="bg-white rounded shadow-lg container mx-auto mt-8 px-4 py-8">
-        <h2 className="text-3xl font-bold mb-6 border-b-2 py-3">Categories of Tires</h2>
+        <h2 className="text-3xl font-bold mb-6 border-b-2 py-3">
+          Categories of Tires
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
           {categories.map((category) => (
             <button
               key={category.value || "all"}

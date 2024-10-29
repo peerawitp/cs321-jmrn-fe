@@ -7,6 +7,8 @@ import { useCartStore } from "@/stores/useCartStore";
 import useProduct from "@/api/user/useProduct";
 
 import useConfirmPurchase from "@/api/user/useConfirmPurchase";
+import Address from "@/interfaces/Address";
+import Image from "next/image";
 
 const CheckoutPage: React.FC = () => {
   const { cartItems, clearCart } = useCartStore();
@@ -18,7 +20,7 @@ const CheckoutPage: React.FC = () => {
     number | null
   >(null); // เก็บข้อมูลที่อยู่ที่เลือก
   const router = useRouter();
-  const { data: userInfo, isLoading, error } = useUserInfo();
+  const { data: userInfo } = useUserInfo();
   // ฟังก์ชันคำนวณราคารวม
   const calculateTotalPrice = () => {
     return cartItems.reduce((total, item) => {
@@ -90,7 +92,7 @@ const CheckoutPage: React.FC = () => {
                 <option value="">Select an address</option>
                 {/* ดึงที่อยู่จาก userInfo */}
                 {userInfo && userInfo.addresses.length > 0 ? (
-                  userInfo.addresses.map((address: any, index: number) => (
+                  userInfo.addresses.map((address: Address, index: number) => (
                     <option key={index} value={index}>
                       {address.houseNumber}, {address.village}, {address.street}
                       , {address.subDistrict}, {address.district},{" "}
@@ -157,7 +159,7 @@ const CheckoutPage: React.FC = () => {
                   >
                     <div className="flex items-center space-x-4">
                       {/* แสดงรูปภาพสินค้า */}
-                      <img
+                      <Image
                         src={product.imageUrl || "/images/no_image.jpg"}
                         alt={product.name}
                         className="w-20 h-20 object-cover rounded"
@@ -180,7 +182,8 @@ const CheckoutPage: React.FC = () => {
 
                     {/* ราคารวมต่อสินค้า */}
                     <div className="text-gray-700 font-semibold">
-                      Total: {(productSize?.price! * item.quantity).toFixed(2)}{" "}
+                      Total:{" "}
+                      {((productSize?.price || 0) * item.quantity).toFixed(2)}{" "}
                       THB
                     </div>
                   </div>
