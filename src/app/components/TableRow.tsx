@@ -3,6 +3,8 @@ import React, { useContext } from "react";
 import { Product } from "@/interfaces/Product";
 import { Context } from "../TableContext";
 import { useRouter } from "next/navigation";
+import { formatThaiDate } from "@/lib/dateHumanize";
+import Image from "next/image";
 
 interface TableRowProps {
   product: Product;
@@ -38,17 +40,22 @@ const TableRow: React.FC<TableRowProps> = ({
     `}
       onClick={handleClick}
     >
-      <td className="break-words border border-gray-300 p-2">
-        {product.id}
-      </td>
+      <td className="break-words border border-gray-300 p-2">{product.id}</td>
       <td className="break-words border-r border-gray-300 p-2">
         {product.name}
       </td>
       <td className="break-words border-r border-gray-300 p-2">
-        {product.description}
+        {product.description?.length! > 50
+          ? `${product.description?.slice(0, 50)}...`
+          : product.description}
       </td>
       <td className="break-words border-r border-gray-300 p-2">
-        {product.imageUrl}
+        <Image
+          alt="Product Image"
+          src={product.imageUrl || "/images/no_image.jpg"}
+          width={100}
+          height={100}
+        />
       </td>
       <td className="break-words border-r border-gray-300 p-2">
         {product.patternAndType}
@@ -60,10 +67,10 @@ const TableRow: React.FC<TableRowProps> = ({
         {product.type}
       </td>
       <td className="break-words border-r border-gray-300 p-2">
-        {product.createdAt}
+        {formatThaiDate(product.createdAt)}
       </td>
       <td className="break-words border-r border-gray-300 p-2">
-        {product.updatedAt}
+        {formatThaiDate(product.updatedAt)}
       </td>
 
       <td className=" border gap-2 px-2 h-[100px] flex flex-row relative items-center justify-center text-center">
