@@ -1,28 +1,30 @@
-'use client'
-import React from 'react'
-import { Product } from '../types/product';
-import { useForm } from 'react-hook-form'
-
+"use client";
+import React from "react";
+import { useForm } from "react-hook-form";
 
 interface CreateFormProps {
   closePopUp: () => void; // Function with no arguments, returning nothing
 }
 
 const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
-
   const { register, handleSubmit } = useForm();
 
   return (
     <div className="overflow-y-auto p-5 bg-slate-200 w-[500px] h-[600px] rounded-md">
-      <form onSubmit={ handleSubmit((data)=>{
-        console.log(data)
-      }) }>
+      <form
+        onSubmit={handleSubmit((data) => {
+          console.log(data);
+        })}
+      >
         <div className="mb-4">
-          <label htmlFor="id" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="id"
+            className="block text-sm font-medium text-gray-700"
+          >
             ID
           </label>
           <input
-            {...register("id", {required:true, minLength:1})}
+            {...register("id", { required: true, minLength: 1 })}
             id="id"
             type="text"
             placeholder="Type here"
@@ -33,11 +35,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700"
+          >
             Name
           </label>
           <input
-            {...register("name", {required:true, minLength:1})}
+            {...register("name", { required: true, minLength: 1 })}
             id="name"
             type="text"
             placeholder="Type here"
@@ -48,11 +53,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-700"
+          >
             Description
           </label>
           <input
-            {...register("description", {required:true, minLength:1})}
+            {...register("description", { required: true, minLength: 1 })}
             id="description"
             type="text"
             placeholder="Type here"
@@ -61,7 +69,10 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="imageURL" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="imageURL"
+            className="block text-sm font-medium text-gray-700"
+          >
             Image URL
           </label>
           <input
@@ -73,11 +84,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="TireSize" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="TireSize"
+            className="block text-sm font-medium text-gray-700"
+          >
             Tire Size
           </label>
           <input
-            {...register("TireSize", {required:true, minLength:1})}
+            {...register("TireSize", { required: true, minLength: 1 })}
             id="TireSize"
             type="text"
             placeholder="Type here"
@@ -88,11 +102,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="PatternAndType" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="PatternAndType"
+            className="block text-sm font-medium text-gray-700"
+          >
             Pattern and Type
           </label>
           <input
-            {...register("PatternAndType", {required:true, minLength:1})}
+            {...register("PatternAndType", { required: true, minLength: 1 })}
             id="PatternAndType"
             type="text"
             placeholder="Type here"
@@ -103,11 +120,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="OverAllDiameter" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="OverAllDiameter"
+            className="block text-sm font-medium text-gray-700"
+          >
             OverAll Diameter
           </label>
           <input
-            {...register("OverAllDiameter", {required:true, minLength:1})}
+            {...register("OverAllDiameter", { required: true, minLength: 1 })}
             id="OverAllDiameter"
             type="number"
             placeholder="Type here"
@@ -118,11 +138,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="OverAllWidth" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="OverAllWidth"
+            className="block text-sm font-medium text-gray-700"
+          >
             OverAll Width
           </label>
           <input
-            {...register("OverAllWidth", {required:true, minLength:1})}
+            {...register("OverAllWidth", { required: true, minLength: 1 })}
             id="OverAllWidth"
             type="number"
             placeholder="Type here"
@@ -133,11 +156,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="MeasurementRim" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="MeasurementRim"
+            className="block text-sm font-medium text-gray-700"
+          >
             Measurement Rim
           </label>
           <input
-            {...register("MeasurementRim", {required:true, minLength:1})}
+            {...register("MeasurementRim", { required: true, minLength: 1 })}
             id="MeasurementRim"
             type="text"
             placeholder="Type here"
@@ -148,7 +174,10 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="StandardRim" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="StandardRim"
+            className="block text-sm font-medium text-gray-700"
+          >
             Standard Rim
           </label>
           <input
@@ -163,11 +192,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="Wheel" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="Wheel"
+            className="block text-sm font-medium text-gray-700"
+          >
             Wheel
           </label>
           <input
-            {...register("Wheel", {required:true, minLength:1})}
+            {...register("Wheel", { required: true, minLength: 1 })}
             id="Wheel"
             type="text"
             placeholder="Type here"
@@ -178,11 +210,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="Type" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="Type"
+            className="block text-sm font-medium text-gray-700"
+          >
             Type
           </label>
           <input
-            {...register("Type", {required:true})}
+            {...register("Type", { required: true })}
             id="Type"
             type="text"
             placeholder="Type here"
@@ -193,11 +228,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="Quantity" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="Quantity"
+            className="block text-sm font-medium text-gray-700"
+          >
             Quantity
           </label>
           <input
-            {...register("Quantity", {required:true, min:1})}
+            {...register("Quantity", { required: true, min: 1 })}
             id="Quantity"
             type="number"
             placeholder="Type here"
@@ -208,11 +246,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="Price" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="Price"
+            className="block text-sm font-medium text-gray-700"
+          >
             Price
           </label>
           <input
-            {...register("Price", {required:true, min:1})}
+            {...register("Price", { required: true, min: 1 })}
             id="Price"
             type="number"
             placeholder="Type here"
@@ -223,11 +264,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="createdAt" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="createdAt"
+            className="block text-sm font-medium text-gray-700"
+          >
             Created At
           </label>
           <input
-            {...register("createdAt", {required:true})}
+            {...register("createdAt", { required: true })}
             id="createdAt"
             type="datetime-local"
             placeholder="Type here"
@@ -238,11 +282,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="updatedAt" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="updatedAt"
+            className="block text-sm font-medium text-gray-700"
+          >
             Updated At
           </label>
           <input
-            {...register("updatedAt", {required:true})}
+            {...register("updatedAt", { required: true })}
             id="updatedAt"
             type="datetime-local"
             placeholder="Type here"
@@ -271,10 +318,10 @@ const CreateForm: React.FC<CreateFormProps> = ({ closePopUp }) => {
             </button>
           </div>
         </div>
-
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default CreateForm
+export default CreateForm;
+

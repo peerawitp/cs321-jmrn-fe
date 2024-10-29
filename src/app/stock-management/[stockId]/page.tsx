@@ -5,6 +5,11 @@ import useProduct from "@/api/user/useProduct";
 import SearchBar from "../../components/SearchBar";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Product, ProductSize } from "@/interfaces/Product";
+import useAddProductSize from "@/api/employee/useAddProductSize";
+import { useQueryClient } from "@tanstack/react-query";
+import useUpdateProductSize from "@/api/employee/useUpdateProductSize";
+import { UpdateProductSize } from "@/interfaces/UpdateProductSize";
+import { AddProductSize } from "@/interfaces/AddProductSize";
 
 const ProductDetail = ({ params }: { params: { stockId: number } }) => {
     const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
@@ -12,7 +17,7 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
     const [selectedID, setSelectedID] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>(""); // State for search term
 
-    const { register, handleSubmit, reset, getValues } = useForm<ProductSize>({
+    const { register, handleSubmit, reset, getValues } = useForm<AddProductSize>({
         defaultValues: {
             productId: 0,
             name: "",
@@ -24,6 +29,10 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
             quantity: 0,
         },
     });
+
+    const addProductSizeMutation = useAddProductSize();
+    const updateProductSizeMutation = useUpdateProductSize();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         const productID = Number(params.stockId);
@@ -45,12 +54,32 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
         }
     };
 
-    const submitHandler: SubmitHandler<ProductSize> = (data) => {
+    const submitHandler: SubmitHandler<AddProductSize> = async (data) => {
         const exists = products?.some((product) => product.name === data.name);
         if (exists) {
             console.log("This product already exists");
         } else {
             console.log("Submitting:", data);
+            data.overallDiameter = Number(data.overallDiameter);
+            data.overallWidth = Number(data.overallWidth);
+            data.price = Number(data.price);
+            data.quantity = Number(data.quantity);
+
+            await addProductSizeMutation.mutateAsync(
+                {
+                    ...data,
+                    productId: Number(params.stockId),
+                },
+                {
+                    onSuccess: () => {
+                        alert("Product size added successfully!");
+                        queryClient.invalidateQueries({ queryKey: ["products"] });
+                    },
+                    onError: (error) => {
+                        alert("An error occurred. " + error.message);
+                    },
+                },
+            );
             reset();
             setSelectedID(null);
         }
@@ -60,6 +89,31 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
         console.log("Selected ID:", selectedID);
         const updatedProduct = getValues();
         console.log("Updated product:", updatedProduct);
+
+        // map with UpdateProductSize interfaces
+        const updateProductSizeForm: UpdateProductSize = {
+            id: selectedID!,
+            name: updatedProduct.name,
+            overallDiameter: updatedProduct.overallDiameter,
+            overallWidth: updatedProduct.overallWidth,
+            measurementRim: updatedProduct.measurementRim,
+            standardRim: updatedProduct.standardRim,
+            price: updatedProduct.price,
+            quantity: updatedProduct.quantity,
+        };
+
+        updateProductSizeMutation.mutateAsync(
+            { ...updateProductSizeForm },
+            {
+                onSuccess: () => {
+                    alert("Product size updated successfully!");
+                    queryClient.invalidateQueries({ queryKey: ["products"] });
+                },
+                onError: (error) => {
+                    alert("An error occurred. " + error.message);
+                },
+            },
+        );
     };
     const filteredProductSizes = currentProduct
         ? currentProduct.productSizes.filter((productSize) =>
@@ -100,6 +154,7 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
                             <input
                                 {...register("overallDiameter")}
                                 id="overallDiameter"
+                type="number"
                                 className="w-full p-2 border rounded"
                                 placeholder="Overall Diameter"
                             />
@@ -114,6 +169,7 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
                             <input
                                 {...register("overallWidth")}
                                 id="overallWidth"
+                type="number"
                                 className="w-full p-2 border rounded"
                                 placeholder="Overall Width"
                             />
@@ -156,6 +212,7 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
                             <input
                                 {...register("price")}
                                 id="price"
+                type="number"
                                 className="w-full p-2 border rounded"
                                 placeholder="Price"
                             />
@@ -170,6 +227,7 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
                             <input
                                 {...register("quantity")}
                                 id="quantity"
+                type="number"
                                 className="w-full p-2 border rounded"
                                 placeholder="Quantity"
                             />
@@ -198,6 +256,22 @@ const ProductDetail = ({ params }: { params: { stockId: number } }) => {
                         </button>
                     </div>
                 </form>
+          <div className="gap-1 mt-6 flex justify-start">
+            <button
+              type="submit"
+              className="btn bg-[#387ADF] hover:bg-[#2558a5] text-white"
+            >
+              Create
+            </button>
+            <button
+              type="button"
+              className="btn bg-slate-200"
+              onClick={updateHandler}
+            >
+              Update
+            </button>
+          </div>
+        </form>
 
                 <div className="mb-4 mt-2">
                     <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
