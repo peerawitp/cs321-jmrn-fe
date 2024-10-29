@@ -11,13 +11,15 @@ import { TireType } from "@/enums/TireType";
 import { AddProduct } from "@/interfaces/AddProduct";
 import useAddProduct from "@/api/employee/useAddProduct";
 import { useQueryClient } from "@tanstack/react-query";
+import useUpdateProduct from "@/api/employee/useUpdateProduct";
+import { UpdateProduct } from "@/interfaces/UpdateProduct";
 
 const Table = () => {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const { data: products } = useProduct();
   const [selectedID, setSelectedID] = useState<number | null>(null);
-  const [isCreating, setIsCreating] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, reset, getValues } = useForm<AddProduct>({
     defaultValues: {
       name: "",
@@ -29,16 +31,20 @@ const Table = () => {
   });
 
   const addProductMutation = useAddProduct();
+  const updateProductMutation = useUpdateProduct();
   const queryClient = useQueryClient();
 
   const handleRowClick = (product: Product) => {
     if (selectedID === product.id) {
       setSelectedID(null);
-      reset(); // Reset the form when deselecting
+      reset();
     } else {
       setSelectedID(product.id);
       reset(product); // Populate the form with selected product's details
     }
+    setFile(null);
+    const input = document.getElementById("image") as HTMLInputElement;
+    input.value = "";
   };
 
   const submitHandler: SubmitHandler<AddProduct> = async (data) => {
@@ -47,7 +53,7 @@ const Table = () => {
       alert("Product already exists");
     } else {
       console.log("Submitting:", data); // Log the submitted data
-      setIsCreating(true);
+      setIsLoading(true);
 
       await addProductMutation.mutateAsync(
         { ...data, image: file },
@@ -55,12 +61,12 @@ const Table = () => {
           onSuccess: () => {
             alert("Product added successfully!");
             queryClient.invalidateQueries({ queryKey: ["products"] });
-            setIsCreating(false);
+            setIsLoading(false);
           },
           onError: (error) => {
             alert("An error occurred. " + error.message);
 
-            setIsCreating(false);
+            setIsLoading(false);
           },
         },
       );
@@ -70,10 +76,41 @@ const Table = () => {
     }
   };
 
-  const updateHandler = () => {
+  const updateHandler = async () => {
     console.log(selectedID);
-    const updatedProduct = { ...getValues() };
-    console.log("Updated product:" + updatedProduct.name);
+    if (!selectedID) {
+      alert("Please select a product to update");
+      return;
+    }
+
+    // map with UpdateProduct interfaces
+    const updateProductForm: UpdateProduct = {
+      id: selectedID,
+      name: getValues("name"),
+      description: getValues("description") || undefined,
+      patternAndType: getValues("patternAndType"),
+      wheel: getValues("wheel"),
+      type: getValues("type"),
+      image: file || undefined,
+    };
+
+    setIsLoading(true);
+
+    await updateProductMutation.mutateAsync(
+      { ...updateProductForm },
+      {
+        onSuccess: () => {
+          alert("Product updated successfully!");
+          queryClient.invalidateQueries({ queryKey: ["products"] });
+          setIsLoading(false);
+        },
+        onError: (error) => {
+          alert("An error occurred. " + error.message);
+
+          setIsLoading(false);
+        },
+      },
+    );
   };
 
   // Custom file change handler
@@ -195,9 +232,9 @@ const Table = () => {
           </div>
 
           {/* Loading Animation */}
-          {isCreating && (
+          {isLoading && (
             <div className="text-center mt-4">
-              <p>Creating new product...</p>
+              <p>Updating product...</p>
               <div className="loader"></div>
             </div>
           )}
