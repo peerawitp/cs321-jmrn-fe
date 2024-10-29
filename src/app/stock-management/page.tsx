@@ -276,13 +276,13 @@ const Table = () => {
                 <th className="p-2 border border-gray-300">ID</th>
                 <th className="p-2 border border-gray-300">Name</th>
                 <th className="p-2 border border-gray-300">Description</th>
-                <th className="p-2 border border-gray-300">Overall Diameter</th>
-                <th className="p-2 border border-gray-300">Overall Width</th>
-                <th className="p-2 border border-gray-300">Measurement Rim</th>
-                <th className="p-2 border border-gray-300">Standard Rim</th>
-                <th className="p-2 border border-gray-300">Price</th>
-                <th className="p-2 border border-gray-300">Quantity</th>
+                <th className="p-2 border border-gray-300">Image</th>
+                <th className="p-2 border border-gray-300">Pattern and Type</th>
+                <th className="p-2 border border-gray-300">Wheel</th>
+                <th className="p-2 border border-gray-300">Type</th>
+                <th className="p-2 border border-gray-300">Created At</th>
                 <th className="p-2 border border-gray-300">Updated At</th>
+                <th className="p-2 border border-gray-300">Action</th>
               </tr>
             </thead>
             <tbody>
